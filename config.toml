@@ -1,0 +1,44 @@
+baseURL = ""
+languageCode = "en-us"
+title = ""
+theme="archie"
+copyright = "© sajib"
+pygmentsstyle = "monokai"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+ignoreErrors = ["error-missing-instagram-accesstoken"]
+
+[params]
+	mode="toggle"
+	useCDN=false
+	subtitle = "Minimal and Clean [blog theme for Hugo](https://github.com/athul/archie)"
+  customcss = ["css/style.css"]
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/"
+
+
+[[params.social]]
+name = "GitLab"
+icon = "gitlab"
+url = "https://gitlab.com/"
+[[menu.main]]
+name = "home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "about"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "tags"
+url = "/tags"
+weight = 4

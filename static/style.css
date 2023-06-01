@@ -1,0 +1,49 @@
+/* the font face rules; src https://github.com/dtinth/comic-mono-font */
+@font-face {font-family: Comic Mono; font-weight: normal;
+  src: url(https://cdn.jsdelivr.net/npm/comic-mono@0.0.1/ComicMono.ttf);}
+@font-face {font-family: Comic Mono Bold; font-weight: bold;
+  src: url(https://cdn.jsdelivr.net/npm/comic-mono@0.0.1/ComicMono-Bold.ttf);}
+
+/* the main stuff */
+body {
+  background-color: #f0e5d2; /*a nice lil beige*/
+	color: #035F31; /*a nice lil green*/
+  max-width: 800px; margin: auto; padding: 10px; /*not sorry to the mfs with wide-ass screens; padding for if smaller than, for breathing space...*/
+  
+  font-family: Comic Mono; font-size: 100%; line-height: 1.5;}
+
+/*the copyright footer thing*/
+footer {font-size: 80%; padding: 20px;}
+
+/*the navigation thing, of course*/
+nav {padding: 20px; text-align: center;}
+
+/* headings ... */
+h1, h2, h3, h4, h5, h6 {text-align: center;}
+h1 {font-size: 140%;}
+h2 {font-size: 130%;}
+h3 {font-size: 115%;}
+
+/* miscellany */
+img {max-width: 100%; height: auto;} /*so the mfs wouldnt noclip*/
+
+hr {width: 65%; border-style: solid; border-color: #035F31; margin-top: 10px; margin-bottom: 10px;} /*nice lil horizontal rule*/
+
+p {padding-bottom: 5px;} /*breathing space*/
+
+ul, ol {text-align: left;} /*so if i ever center my stuff again these would remain on the left*/
+li {padding-bottom: 3px;} /*breathing space*/
+
+details {padding: 0 5px; margin: 10px 0;} /*breathing space*/
+details summary {cursor: pointer;}
+details[open] {background-color: #f7f2e8;} /*idk why ive decided for a slightly lighter bg on opened details*/
+
+/* links stuff */
+/* a {color: #004F9E; text-decoration: underline wavy;} */
+a {color: #004F9E; text-decoration: none;}
+a:hover {color: #006DDB; text-decoration-style: dashed;}
+a:visited {color: #5A2C1B;}
+
+/* classes */
+#changelog {text-align: left; font-size: 90%;}
+#centerpic {margin-left: auto; margin-right: auto; display: block;}
