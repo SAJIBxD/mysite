@@ -47,3 +47,5 @@ a:visited {color: #5A2C1B;}
 /* classes */
 #changelog {text-align: left; font-size: 90%;}
 #centerpic {margin-left: auto; margin-right: auto; display: block;}
+
+code { padding: 2px 4px; font-family: Comic Mono; font-size: 95%; border-radius: 4px; background-color: #f1f0ea; }
