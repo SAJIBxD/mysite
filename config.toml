@@ -13,7 +13,7 @@ ignoreErrors = ["error-missing-instagram-accesstoken"]
 	mode="toggle"
 	useCDN=false
 	subtitle = "Minimal and Clean [blog theme for Hugo](https://github.com/athul/archie)"
-  customcss = ["css/style.css"]
+
 [[params.social]]
 name = "GitHub"
 icon = "github"
@@ -25,21 +25,21 @@ name = "GitLab"
 icon = "gitlab"
 url = "https://gitlab.com/"
 [[menu.main]]
-name = "home"
+name = "Home"
 url = "/"
 weight = 1
 
 [[menu.main]]
-name = "posts"
+name = "Posts"
 url = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "about"
+name = "About"
 url = "/about"
 weight = 3
 
 [[menu.main]]
-name = "tags"
+name = "Tags"
 url = "/tags"
 weight = 4
