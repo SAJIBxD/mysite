@@ -75,7 +75,6 @@ ul > li::before {
 
 /* Images */
 img {
-  border: 1px solid #ececec;
   max-width: 100%;
   height: auto;
 }

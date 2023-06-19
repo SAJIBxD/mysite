@@ -76,7 +76,9 @@ a:hover {
   background-color: var(--darkMaincolor);
   color: black;
 }
-
+footer {
+  border-top: 1px solid var(--darkMaincolor);
+}
 .site-description a {
   color: #ddd;
 }
