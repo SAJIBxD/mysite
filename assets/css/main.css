@@ -35,7 +35,7 @@ p {
 
 hr {
   border: 0;
-  border-top: 3px dotted var(--bordercl);
+  border-top: 1px solid var(--bordercl);
   margin: 1em 0;
 }
 
@@ -75,7 +75,7 @@ ul > li::before {
 
 /* Images */
 img {
-  border: 3px solid #ececec;
+  border: 1px solid #ececec;
   max-width: 100%;
   height: auto;
 }
@@ -174,6 +174,24 @@ h1 {font-size: 140%;}
 h2 {font-size: 130%;}
 h3 {font-size: 115%;}
 
+h1.paper{
+  background: url(/images/header.png);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: cover;
+
+  margin: 10px 0;
+  padding: 5px 20px;
+  width: fit-content;
+  box-shadow: 1px 1px 1px 0px black;
+
+  font-family: Typewriter, monospace;
+  font-size: 1.5em;
+  text-align: left;
+
+  transform: rotate(-1deg);
+}
+
 .meta {
   color: #999;
   letter-spacing: -0.5px;
@@ -184,7 +202,7 @@ footer {
   font-size: 85%;
   display: flex;
   align-items: center;
-  border-top: 0.3rem dotted var(--bordercl);
+  border-top: 1px solid var(--bordercl);
   padding: 10px;
   margin-top: 2rem;
 }
@@ -349,4 +367,42 @@ table th{
 table td{
   padding: 6px 13px;
   border: 1px solid #dfe2e5;
+}
+
+/* Music album list */
+#music-album-list div{
+  max-width: 140px;
+}
+
+/* Gallery */
+.gallery{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.gallery-item{
+  margin: 5px;
+}
+
+.gallery-item img{
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.25);
+}
+
+.gallery-item figcaption{
+  margin: 5px;
+}
+
+.gallery-item a > img:hover{
+  transition: 200ms;
+  filter: brightness(110%);
+}
+
+.gallery-item a > img:active{
+  transition: 30ms;
+  transform: scale(0.95);
+}
+
+.gallery-item p{
+  line-height: 15px;
 }

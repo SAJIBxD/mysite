@@ -1,8 +1,7 @@
 baseURL = "https://sajib.xyz/"
 languageCode = "en-us"
 title = ""
-theme="archie"
-copyright = "© sajib"
+copyright = "© SAJIB"
 pygmentsstyle = "monokai"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
@@ -12,7 +11,7 @@ ignoreErrors = ["error-missing-instagram-accesstoken"]
 [params]
 	mode="toggle"
 	useCDN=false
-	subtitle = "Minimal and Clean [blog theme for Hugo](https://github.com/athul/archie)"
+	subtitle = "Minimal and Clean"
 
 [[params.social]]
 name = "GitHub"

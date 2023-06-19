@@ -2,11 +2,17 @@
 <main>
 	<article>
 		<div class="title">
+		{{ if isset .Params "showtitle" }}
+			{{ if .Params.showtitle }}
 			<h1 class="title">{{ .Title }}</h1>
+				{{ end }}
+			{{ else }}
+			<h1 class="title">{{ .Title }}</h1>
+     	{{ end }}
 
       <div class="meta">
       {{ if isset .Params "showdate" }}
-        {{ if .Params.showDate }}
+        {{ if .Params.showdate }}
         Posted on {{ dateFormat "Jan 2, 2006" .Date }}
         {{ end }}
       {{ else }}
