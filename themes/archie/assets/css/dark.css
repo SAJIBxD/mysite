@@ -1,6 +1,6 @@
 body {
-  color: white;
-  background-color: #202124;
+  color: #ababab;
+  background-color: #1f1f1f;
 }
 
 ::-moz-selection {
@@ -19,17 +19,18 @@ hr {
   border-top: 3px dotted blue;
 }
 code {
-  background-color: lightblue;
-  color: black;
+  background-color: #292929;
+  color: inherit;
   text-decoration: bold;
   padding: 0.1em 0.2em;
 }
 pre {
-  background-color: #272822;
+  background-color: #4a4a4a;
   line-height: 1.4;
   overflow-x: auto;
   padding: 1em;
 }
+
 blockquote {
   border-color: blue;
 }
@@ -40,7 +41,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: #ddd;
+  color: #cacaca;
 }
 h1::before {
   color: var(--darkMaincolor);
@@ -91,6 +92,9 @@ a:hover {
   color: black;
 }
 
+.title h1 {
+  color: white;
+}
 .site-title a {
   color: white;
   text-decoration: none !important;

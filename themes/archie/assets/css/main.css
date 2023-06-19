@@ -4,7 +4,7 @@
 --bordercl:#035F31;
 --callouctcolor:dodgerblue;
 --hovercolor:navy;
---darkMaincolor: #50fa7b;
+--darkMaincolor: #6f0600;
 }
 html {
   color: #232333;
@@ -115,11 +115,12 @@ code {
 }
 
 pre {
-  background-color: #ececec;
+  background-color: #f5f5f5;
   line-height: 1.4;
   overflow-x: auto;
   padding: 1em;
 }
+
 
 .highlight pre ::selection {
   background: rgba(255, 255, 255, 0.2);
