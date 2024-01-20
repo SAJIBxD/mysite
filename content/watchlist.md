@@ -6,11 +6,19 @@ describtion : "here i will put my movies and tvs watchlist"
 
 curently watching
 
-* 
+* A Shop for Killers (2024)
+    {{< date date="2024-01-19" >}}
+* Death's Game (2023)
+    {{< date date="2023-12-14" >}}
 
 already finished
 
-* strangers from hell (2019)
+* Mouse (2021)
+    {{< date date="2023-12-22" >}}
+* Doona! (2023)
+    {{< playaudio audio="/doona-ost-5.mp3" >}}
+    {{< date date="2023-10-14" >}}
+* Strangers from Hell (2019)
     {{< playaudio audio="/strangers-from-hell-ost-3.mp3" >}}
     {{< date date="2023-05-25" >}}
 * 
