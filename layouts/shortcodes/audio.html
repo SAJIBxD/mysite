@@ -1,0 +1,31 @@
+{{ $src := .Get "src" }}
+{{ $uniqueID := $src | md5 }}
+
+<audio id="{{ $uniqueID }}" src="{{ $src }}"></audio>
+<span class="play-pause-btn" onclick="togglePlay('{{ $uniqueID }}')">🎵</span>
+
+<script>
+    let currentlyPlayingID = null;
+
+    function togglePlay(id) {
+        let audioElement = document.getElementById(id);
+
+        if (audioElement.paused || id !== currentlyPlayingID) {
+            pauseAllAudio();
+            audioElement.play();
+            currentlyPlayingID = id;
+        } else {
+            audioElement.pause();
+            currentlyPlayingID = null;
+        }
+    }
+
+    function pauseAllAudio() {
+        let audioPlayers = document.querySelectorAll('audio');
+        audioPlayers.forEach(player => {
+            if (!player.paused) {
+                player.pause();
+            }
+        });
+    }
+</script>

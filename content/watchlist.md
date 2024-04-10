@@ -16,12 +16,11 @@ already finished
 * Mouse (2021)
     {{< date date="2023-12-22" >}}
 * Doona! (2023)
-    {{< playaudio audio="/doona-ost-5.mp3" >}}
+    {{< audio src="/doona-ost-5.mp3" >}}
     {{< date date="2023-10-14" >}}
 * Strangers from Hell (2019)
-    {{< playaudio audio="/strangers-from-hell-ost-3.mp3" >}}
+    {{< audio src="/strangers-from-hell-ost-3.mp3" >}}
     {{< date date="2023-05-25" >}}
-* 
 
 droped
 
