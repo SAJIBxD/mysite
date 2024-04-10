@@ -8,7 +8,7 @@ draft: true
 curently watching
 
 * strangers from hell (2019)
-    {{< playaudio audio="/strangers-from-hell-ost-3.mp3" >}}
+    {{< audio src="/strangers-from-hell-ost-3.mp3" >}}
     {{< date date="2023-05-25" >}}
 
 already finished
