@@ -407,3 +407,7 @@ table td{
 .gallery-item p{
   line-height: 15px;
 }
+
+.no-space-before {
+  margin-left: -8px; /* Adjust margin as needed */
+}

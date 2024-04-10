@@ -18,8 +18,6 @@ layoutBackgroundHeaderSpace: false
 Real websites that are built with Blowfish.
 {{< /lead >}}
 
-Strangers from hell (2019) {{< date date="2023-05-28" >}}
-
 
 | Website                                                               | Details                      |
 | --------------------------------------------------------------------- | ---------------------------- |
