@@ -13,14 +13,14 @@
           </p>
 				</div>
 				<nav>
-					<a href="/">Home</a>
+					<a href="{{ .Site.BaseURL }}">Home</a>
 					<br>
-					<a href="/posts">Posts</a> / 
-					<a href="/about">About</a> /
-					<a href="/music">Music</a> /
-					<a href="/misc">Misc</a>
+					<a href="{{ .Site.BaseURL }}posts">Posts</a> / 
+					<a href="{{ .Site.BaseURL }}about">About</a> /
+					<a href="{{ .Site.BaseURL }}music">Music</a> /
+					<a href="{{ .Site.BaseURL }}misc">Misc</a>
 					<br>
-					<a href="/updates">Site Updates</a>
+					<a href="{{ .Site.BaseURL }}updates">Site Updates</a>
 				</nav>
 			</main>
 			{{ partial "footer.html" . }}
