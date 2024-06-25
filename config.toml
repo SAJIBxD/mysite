@@ -1,6 +1,4 @@
-#baseURL = "/"
-relativeURLs = true
-uglyURLs = true
+baseURL = "https://sajibxd.github.io/mysite/"
 languageCode = "en-us"
 title = ""
 copyright = "© SAJIB"
