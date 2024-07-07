@@ -1,7 +1,14 @@
 {{ $src := .Get "src" }}
 {{ $uniqueID := $src | md5 }}
-
-<audio id="{{ $uniqueID }}" src="{{ $src }}"></audio>
+{{ if (findRE "^/" $src) }} <!-- If link has a leading slash -->
+    <!-- Cannot use absURL below because it doesn't work as expected if baseURL has a subdir -->
+    {{ $baseurl_no_trailing_slash := $.Site.BaseURL | replaceRE "/$" "" }}
+    <audio id="{{ $uniqueID }}" src="{{ (printf "%s%s" $baseurl_no_trailing_slash $src) }}"></audio>
+{{ else }}
+    <!-- Below variable will always have a trailing slash, even with uglyURLs enabled -->
+    {{ $permalink := $.Page.Permalink | replaceRE "\\.html$" "/" }}
+    <audio id="{{ $uniqueID }}" src="{{ (printf "%s%s" $permalink $src) }}"></audio>
+{{ end }}
 <span class="play-pause-btn" onclick="togglePlay('{{ $uniqueID }}')">🎵</span>
 
 <script>
