@@ -1,46 +1,3 @@
-function toggleTheme() {
-    const html = document.documentElement;
-    const themeIcon = document.getElementById('themeIcon');
-    
-    if (html.getAttribute('data-theme') === 'dark') {
-        html.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-    } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-    }
-}
-
-function setTheme() {
-    const html = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        html.setAttribute('data-theme', 'dark');
-    } else if (savedTheme === 'light') {
-        html.removeAttribute('data-theme');
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        html.setAttribute('data-theme', 'dark');
-    }
-}
-
-// Call setTheme on page load
-// Call setTheme on page load
-document.addEventListener('DOMContentLoaded', () => {
-    setTheme();
-    const themeIcon = document.getElementById('themeIcon');
-    if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-    }
-});
-
-// Listen for changes in system color scheme
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setTheme);
-
 document.addEventListener('DOMContentLoaded', () => {
     const games = {
         1: {
@@ -201,13 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatedKeysTitle = document.getElementById('generatedKeysTitle');
     const copyStatus = document.getElementById('copyStatus');
     const generateMoreBtn = document.getElementById('generateMoreBtn');
-    const sourceCode = document.getElementById('sourceCode');
 
     let selectedGame = null;
-
-    sourceCode.addEventListener('click', () => {
-        window.open('https://github.com/ShafiqSadat/HamsterKeyGenWeb', '_blank');
-    });
 
     gameOptions.forEach(option => {
         option.addEventListener('click', () => {
@@ -247,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText.innerText = '0%';
         progressLog.innerText = 'Starting...';
         progressContainer.classList.remove('hidden');
+        keyCountLabel.classList.remove('hidden');
         keyContainer.classList.add('hidden');
         generatedKeysTitle.classList.add('hidden');
         keysList.innerHTML = '';
