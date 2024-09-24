@@ -1,7 +1,7 @@
 // Music albums script. It parses data from a JSON file obtained from the Spotify development site
 // and displays the info on a webpage.
 
-let albumFile = "/data/albums.json";
+let albumFile = "/mysite/data/albums.json";
 
 async function loadAlbums(file){
     res = await fetch(file);
