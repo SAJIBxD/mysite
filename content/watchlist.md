@@ -4,6 +4,17 @@ date: 2023-05-27T19:06:52+06:00
 describtion : "here i will put my movies and tvs watchlist"
 ---
 
+I love watch !! So I made a page on my site that I get to update every time I watch something interesting.
+
+☆☆☆☆☆: dogshit \
+★☆☆☆☆: it was pretty bad \
+★★☆☆☆: didn't like it much \
+★★★☆☆: it was fine \
+★★★★☆: enjoyed it \
+★★★★★: loved it \
+▬▬▬▬: no rating
+
+
 curently watching
 
 
@@ -18,7 +29,7 @@ Shows {{< color ":" "red" >}}
     {{< date date="2024-03-24" >}}
 * The King of Pigs
     {{< date date="2024-02-11" >}}
-* A Killer Paradox
+* A Killer Paradox ★★★☆☆
     {{< date date="2024-02-09" >}}
 * Parasyte: The Grey
     {{< date date="2024-04-05" >}}
@@ -26,14 +37,14 @@ Shows {{< color ":" "red" >}}
     {{< date date="2024-03-14" >}}
 * A Shop for Killers (2024)
     {{< date date="2024-01-19" >}}
-* Death's Game (2023)
+* Death's Game (2023) ★★★☆☆
     {{< date date="2023-12-14" >}}
-* Mouse (2021)
+* Mouse (2021) ★★★★★
     {{< date date="2023-12-22" >}}
-* Doona! (2023)
+* Doona! (2023) ★★★★★
     {{< audio src="/doona-ost-5.mp3" >}}
     {{< date date="2023-10-14" >}}
-* Strangers from Hell (2019)
+* Strangers from Hell (2019) ★★★★★
     {{< audio src="/strangers-from-hell-ost-3.mp3" >}}
     {{< date date="2023-05-25" >}}
 
