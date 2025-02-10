@@ -4,7 +4,6 @@
   {{ partial "header.html" . }}
   <body>
     <div class="content">
-      {{ partial "head.html" . }}
       <h1>Sajib's Space</h1>
       <main>
         <div>
@@ -15,7 +14,7 @@
             site. We suggest you leave and try your luck elsewhere.
           </p>
         </div>
-        <nav>
+        <div>
           <a href="{{ .Site.BaseURL }}">Home</a>
           <br />
           <a href="{{ .Site.BaseURL }}posts">Posts</a> /
@@ -24,9 +23,9 @@
           <a href="{{ .Site.BaseURL }}misc">Misc</a>
           <br />
           <a href="{{ .Site.BaseURL }}updates">Site Updates</a>
-        </nav>
+        </div>
       </main>
-      {{ partial "footer.html" . }}
     </div>
+    {{ partial "footer.html" . }}
   </body>
 </html>

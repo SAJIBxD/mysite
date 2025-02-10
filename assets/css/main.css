@@ -9,8 +9,6 @@
 
 body {
   background-color: #fdfcf6;
-  /*color: #035F31;
-  display: block; */
   color: #333;
   margin: auto;
   /*font-family: Comic Mono;*/
@@ -55,7 +53,6 @@ a:hover {
 ul {
   text-align: left;
   list-style: none;
-
 }
 
 li {
@@ -211,7 +208,6 @@ h6#section {
 
 /* Footer */
 footer {
-  margin-top: 20px;
   padding: 10px;
   background: #2a7f62;
   color: white;
@@ -278,6 +274,11 @@ footer {
 .tags a:hover {
   color: white;
   background-color: var(--hovercolor);
+}
+
+.play-pause-btn {
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
 svg {
