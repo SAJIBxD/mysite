@@ -10,7 +10,7 @@ ignoreErrors = ["error-missing-instagram-accesstoken"]
 
 [params]
 	mode="toggle"
-	useCDN=false
+	useCDN=true
 	subtitle = "Minimal and Clean"
 
 [[params.social]]

@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
-	<title>home of sajib</title>
-	{{ partial "header.html" . }}
-	<body>
-		<div class="content">
-			{{ partial "head.html" . }}
-			<h1>Sajib's Space</h1>
-			<main>
-				<div>
-					<img id="centerpic" src="computercat.jpg" alt="">
-					<p>What r u doing here bro? We know you didn't mean to end up here, but we must inform you that you won't find anything of value on this site. We suggest you leave and try your luck elsewhere.
+  <title>home of sajib</title>
+  {{ partial "header.html" . }}
+  <body>
+    <div class="content">
+      {{ partial "head.html" . }}
+      <h1>Sajib's Space</h1>
+      <main>
+        <div>
+          <img id="centerpic" src="computercat.jpg" alt="" />
+          <p>
+            What r u doing here bro? We know you didn't mean to end up here, but
+            we must inform you that you won't find anything of value on this
+            site. We suggest you leave and try your luck elsewhere.
           </p>
-				</div>
-				<nav>
-					<a href="{{ .Site.BaseURL }}">Home</a>
-					<br>
-					<a href="{{ .Site.BaseURL }}posts">Posts</a> / 
-					<a href="{{ .Site.BaseURL }}about">About</a> /
-					<a href="{{ .Site.BaseURL }}music">Music</a> /
-					<a href="{{ .Site.BaseURL }}misc">Misc</a>
-					<br>
-					<a href="{{ .Site.BaseURL }}updates">Site Updates</a>
-				</nav>
-			</main>
-			{{ partial "footer.html" . }}
-		</div>
-	</body>
+        </div>
+        <nav>
+          <a href="{{ .Site.BaseURL }}">Home</a>
+          <br />
+          <a href="{{ .Site.BaseURL }}posts">Posts</a> /
+          <a href="{{ .Site.BaseURL }}about">About</a> /
+          <a href="{{ .Site.BaseURL }}music">Music</a> /
+          <a href="{{ .Site.BaseURL }}misc">Misc</a>
+          <br />
+          <a href="{{ .Site.BaseURL }}updates">Site Updates</a>
+        </nav>
+      </main>
+      {{ partial "footer.html" . }}
+    </div>
+  </body>
 </html>

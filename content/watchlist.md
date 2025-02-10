@@ -1,32 +1,23 @@
 ---
-title: "the stuff i have been watching"
+title: "📺 My Watchlist"
 date: 2023-05-27T19:06:52+06:00
 describtion: "here i will put my movies and tvs watchlist"
 ---
 
 I love watch !! So I made a page on my site that I get to update every time I watch something interesting.
 
-☆☆☆☆☆: dogshit \
-★☆☆☆☆: it was pretty bad \
-★★☆☆☆: didn't like it much \
-★★★☆☆: it was fine \
-★★★★☆: enjoyed it \
-★★★★★: loved it \
-▬▬▬▬: no rating
-
-curently watching
+### Curently Watching{#section}
 
 - Death's Game (2023)
   {{< date date="2023-12-14" >}}
 
-already finished
-Movies {{< color ":" "red" >}}
+#### Movies {#section}
 
 - Thirst (2009) ★★★★★
   {{< audio src="/sang-hyuns-prayer.mp3" >}}
   {{< date date="2025-01-16" >}}
 
-Shows {{< color ":" "red" >}}
+#### Shows {#section}
 
 - My Undead Yokai Girlfriend
   {{< date date="2024-03-24" >}}
@@ -51,6 +42,6 @@ Shows {{< color ":" "red" >}}
   {{< audio src="/strangers-from-hell-ost-3.mp3" >}}
   {{< date date="2023-05-25" >}}
 
-droped
+### Dropped {#section}
 
 -
