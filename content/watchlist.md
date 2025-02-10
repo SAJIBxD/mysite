@@ -2,6 +2,7 @@
 title: "📺 My Watchlist"
 date: 2023-05-27T19:06:52+06:00
 describtion: "here i will put my movies and tvs watchlist"
+showdate: false
 ---
 
 I love watch !! So I made a page on my site that I get to update every time I watch something interesting.

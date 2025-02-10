@@ -139,12 +139,14 @@ pre code {
   margin: auto;
   background: #fff;
   padding: 20px;
-  border-radius: 0px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Header */
+.rounded-border {
+  border-radius: 10px;
+}
 
+/* Header */
 nav {
   background: #2a7f62;
   padding: 15px;
@@ -170,24 +172,6 @@ nav a:hover {
 
 h1 {
   color: #2a7f62;
-}
-
-h1.paper {
-  background: url(/images/header.png);
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: cover;
-
-  margin: 10px 0;
-  padding: 5px 20px;
-  width: fit-content;
-  box-shadow: 1px 1px 1px 0px black;
-
-  font-family: Typewriter, monospace;
-  font-size: 1.5em;
-  text-align: left;
-
-  transform: rotate(-1deg);
 }
 
 h2#section,
