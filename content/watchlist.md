@@ -15,7 +15,7 @@ I love watch !! So I made a page on my site that I get to update every time I wa
 #### Movies {#section}
 
 - Thirst (2009) ★★★★★
-  {{< audio src="/sang-hyuns-prayer.mp3" >}}
+  {{< audio src="/sang-hyuns-prayer.opus" >}}
   {{< date date="2025-01-16" >}}
 
 #### Shows {#section}
