@@ -10,7 +10,7 @@
     <audio id="{{ $uniqueID }}" src="{{ (printf "%s%s" $permalink $src) }}"></audio>
 {{ end }}
 <span class="play-pause-btn" onclick="togglePlay('{{ $uniqueID }}')">🎵</span>
-
+{{ if not (.Page.Scratch.Get "audioScriptIncluded") }}
 <script>
     let currentlyPlayingID = null;
 
@@ -36,3 +36,5 @@
         });
     }
 </script>
+{{ .Page.Scratch.Set "audioScriptIncluded" true }}
+{{ end }}
