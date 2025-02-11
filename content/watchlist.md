@@ -9,8 +9,8 @@ I love watch !! So I made a page on my site that I get to update every time I wa
 
 ### Curently Watching{#section}
 
-- Death's Game (2023)
-  {{< date date="2023-12-14" >}}
+- Invincible season 3
+  {{< date date="2025-02-07" >}}
 
 #### Movies {#section}
 
