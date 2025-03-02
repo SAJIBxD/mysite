@@ -25,7 +25,7 @@
 	{{ if and (isset .Site.Params "social") (.Site.Params.useCDN | default false) -}}
 		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 	{{- else if or (isset .Site.Params "social") (eq .Site.Params.mode "toggle") -}}
-		<script src="{{ .Site.BaseURL }}js/feather.min.js"></script>
+		<script src="{{ "js/feather.min.js" | relURL }}"></script>
 	{{ end }}
 	{{ if .Site.Params.useCDN | default false -}}
 	<link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
@@ -34,16 +34,16 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 	{{- else -}}
 	{{ $fontstyle := resources.Get "css/fonts.css" | fingerprint }}
-        <link href="{{ $fontstyle.Permalink }}" rel="stylesheet">
+        <link href="{{ $fontstyle.RelPermalink }}" rel="stylesheet">
 	{{ end }}
 
 	{{ $style := resources.Get "css/main.css" | fingerprint }}
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ $style.Permalink | safeURL }}">
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ $style.RelPermalink }}">
 
 
 	{{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") (eq .Site.Params.mode "toggle") -}}
 		{{ $darkstyle := resources.Get "css/dark.css" | fingerprint }}
-		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="{{ $darkstyle.Permalink }}" {{ if eq .Site.Params.mode "auto" }}media="(prefers-color-scheme: dark)"{{ end }} {{ if eq .Site.Params.mode "toggle" }}disabled{{ end }} />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="{{ $darkstyle.RelPermalink }}" {{ if eq .Site.Params.mode "auto" }}media="(prefers-color-scheme: dark)"{{ end }} {{ if eq .Site.Params.mode "toggle" }}disabled{{ end }} />
 	{{ end }}
 
 	<!-- Mathjax support -->
@@ -91,7 +91,7 @@
 	{{- if isset .Site.Params "customcss" }}
 		{{ range .Site.Params.customCSS }}
 		{{ $customstyle := resources.Get . | fingerprint }}
-		<link rel="stylesheet" type="text/css" href="{{ $customstyle.Permalink }}">
+		<link rel="stylesheet" type="text/css" href="{{ $customstyle.RelPermalink }}">
 		{{ end }}
 	{{- end -}}
 	{{- range .Site.Params.customJS }}
@@ -100,7 +100,7 @@
 	{{- else if (hasPrefix . "<script")}}
     {{ .| safeHTML }}
 	{{- else }}
-	<script src="{{ $.Site.BaseURL }}{{ . }}"></script>
+	<script src="{{ . | relURL }}"></script>
 	{{- end }}
 	{{- end }}
 </head>
