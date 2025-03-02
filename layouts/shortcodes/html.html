@@ -1,0 +1,7 @@
+{{ $content := .Inner }}
+
+{{/* Find all script tags and replace URLs with relURL */}}
+{{ $content = replaceRE "<script.*?src=[\"'](.*?)[\"'].*?>.*?</script>" (printf "<script src=\"%s\"></script>" (relURL "$1")) $content }}
+
+{{/* Output the content */}}
+{{ $content | safeHTML }}
