@@ -1,7 +1,10 @@
 // Music albums script. It parses data from a JSON file obtained from the Spotify development site
 // and displays the info on a webpage.
 
-let albumFile = "/mysite/data/albums.json";
+// Get the base path from the URL (it will include the subdirectory)
+var basePath = window.location.pathname.split('/')[1];
+
+var albumFile = (basePath ? "/" + basePath : "") + "/data/albums.json";
 
 async function loadAlbums(file){
     res = await fetch(file);
