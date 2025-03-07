@@ -17,8 +17,11 @@ body {
   line-height: 1.6;
   max-width: 800px;
   padding: 2rem;
-  background-image: linear-gradient(#dcd4c9 1px, transparent 1px),
-    linear-gradient(90deg, #dcd4c9 1px, transparent 1px);
+  background-image: linear-gradient(
+      rgba(220, 212, 201, 0.4) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(220, 212, 201, 0.5) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
@@ -159,7 +162,7 @@ figure h4::before {
 
 /* Code blocks */
 code {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: monospace;
   background-color: #f1f1f1;
   padding: 0.1em 0.2em;
 }
@@ -170,6 +173,7 @@ pre {
   line-height: 1.4;
   overflow-x: auto;
   padding: 1em;
+  opacity: 0.8;
 }
 
 .highlight pre ::selection {
@@ -197,6 +201,7 @@ pre code {
 .meta {
   color: #999;
   letter-spacing: -0.5px;
+  font-size: small;
 }
 
 .post-container {
