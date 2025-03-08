@@ -240,19 +240,12 @@ footer {
 }
 
 /* Common */
-.title h1 {
-  margin-bottom: 0;
-}
 
 time {
   color: grey;
 }
 
 /* Posts */
-article .title {
-  margin-bottom: 1em;
-}
-
 article :is(h1, h2, h3, h4, h5, h6) {
   margin-bottom: 0;
 }
@@ -574,4 +567,16 @@ table td {
   .error-code {
     font-size: 4rem;
   }
+}
+
+/* Style for post titles */
+.post-title {
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--ink-color);
+}
+
+/* Style for custom page titles */
+.page-title {
+  font-size: 2rem;
 }

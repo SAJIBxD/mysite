@@ -2,23 +2,26 @@
 <main>
 	<article>
 		<div class="title">
-		{{ if isset .Params "showtitle" }}
-			{{ if .Params.showtitle }}
-			<h1 class="title">{{ .Title }}</h1>
+		{{ if eq .Type "posts" }}
+			<!-- Style for posts -->
+			<h1 class="post-title">{{ .Title }}</h1>
+		{{ else }}
+			<!-- Style for custom pages -->
+			<h1 class="page-title">{{ .Title }}</h1>
+		{{ end }}
+
+		<div class="meta">
+		{{ if eq .Type "posts" }}
+			{{ if isset .Params "showdate" }}
+				{{ if .Params.showdate }}
+				Posted on {{ dateFormat "Jan 2, 2006" .Date }}
 				{{ end }}
 			{{ else }}
-			<h1 class="title">{{ .Title }}</h1>
-     	{{ end }}
-
-      <div class="meta">
-      {{ if isset .Params "showdate" }}
-        {{ if .Params.showdate }}
-        Posted on {{ dateFormat "Jan 2, 2006" .Date }}
-        {{ end }}
-      {{ else }}
-        Posted on {{ dateFormat "Jan 2, 2006" .Date }}
-      {{ end }}
-        {{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
+				Posted on {{ dateFormat "Jan 2, 2006" .Date }}
+			{{ end }}
+			{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}
+		{{ end }}
+		</div>
 		</div>
 		{{ if isset .Params "tldr" }}
 		<div class="tldr">
@@ -30,8 +33,8 @@
 			{{ .Content }}
 		</section>
 
+		{{ if eq .Type "posts" }}
 		<div class="post-tags">
-			{{ if ne .Type "page" }}
 			{{ if gt .Params.tags 0 }}
 			<div class="tags-container">
 				<span class="tags-label">Tags:</span>
@@ -42,8 +45,8 @@
 				</ul>
 			</div>
 			{{ end }}
-			{{ end }}
 		</div>
+		{{ end }}
 		{{- $.Scratch.Set "isDisqus" true -}}
 		<!-- Check if disqus short name is given -->
 		{{ if not .Site.Config.Services.Disqus.Shortname }}
