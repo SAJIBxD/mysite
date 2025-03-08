@@ -20,6 +20,8 @@ I love watch !! So I made a page on my site that I get to update every time I wa
 
 #### Shows {#section}
 
+- Hannibal ★★★★★
+  {{< date date="2025-02-19" >}}
 - My Undead Yokai Girlfriend
   {{< date date="2024-03-24" >}}
 - The King of Pigs
