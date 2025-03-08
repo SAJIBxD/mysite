@@ -305,15 +305,47 @@ article .title {
   display: flex;
   justify-content: space-between;
 }
-.tags li::before {
-  content: "🏷 ";
+.tags-container {
+  margin-top: 2rem;
+  padding: 1rem 0;
 }
-.tags a {
-  border-bottom: 3px solid var(--maincolor);
+
+.tags-label {
+  font-weight: bold;
+  margin-right: 1rem;
 }
-.tags a:hover {
-  color: white;
-  background-color: var(--hovercolor);
+
+.tags-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tags-list li::before {
+  content: none;
+}
+
+.tag-item {
+  display: inline-block;
+}
+
+.tag-item a {
+  background: var(--paper-color);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--ink-color);
+  border: 1px solid var(--ink-color);
+  transition: all 0.3s ease;
+}
+
+.tag-item a:hover {
+  background: var(--ink-color);
+  color: var(--paper-color);
 }
 svg {
   max-height: 15px;
@@ -390,7 +422,6 @@ svg {
   background: cyan;
   color: royalblue;
 }
-.highlight pre code[class*="language-md"]::before,
 .highlight pre code[class*="language-md"]::before {
   content: "Markdown";
   background: royalblue;
@@ -401,7 +432,11 @@ svg {
   background: #3178c6;
   color: #fff;
 }
-
+.highlight pre code[class*="language-sql"]::before {
+  content: "SQL";
+  background: #ffffff;
+  color: #e7700e;
+}
 /* table */
 table {
   border-spacing: 0;
@@ -433,6 +468,10 @@ table td {
 @media (max-width: 768px) {
   body {
     padding: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
   }
 
   nav {
