@@ -472,9 +472,12 @@ table td {
   font-size: small;
 }
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   body {
     padding: 1rem;
+    font-size: 1rem;
+  }
+  p {
     font-size: 1rem;
   }
 
@@ -580,7 +583,7 @@ table td {
   margin: 2rem 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .page-title {
     margin: 1.5rem 0;
     font-size: 1.8rem;
