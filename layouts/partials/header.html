@@ -1,60 +1,75 @@
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	{{- $title := ( .Title ) -}}
-	{{- $siteTitle := ( .Site.Title ) -}}
-	{{- if .IsHome -}}
-	<title>{{ $siteTitle }} | Home </title>
-	{{- else -}}
-	<title>{{ $title }} - {{ $siteTitle }}</title>
-	{{- end -}}
-
-	{{- if isset .Site.Params "favicon" -}}
-	<link rel="icon" type="image/png" href={{ .Site.Params.favicon }} />
-	{{- end -}}
-
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<!-- Title -->
+	{{- $title := .Title -}}
+	{{- $siteTitle := .Site.Title -}}
+	<title>
+		{{- if .IsHome -}}
+			{{- if $siteTitle -}}{{ $siteTitle }}{{- else -}}Home{{- end -}}
+		{{- else -}}
+			{{- if $title -}}{{ $title }} - {{ $siteTitle }}{{- else -}}{{ $siteTitle }}{{- end -}}
+		{{- end -}}
+	</title>
+
+	<!-- Meta tags -->
+	<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+	{{- if isset .Site.Params "og_image" }}
 	<meta property="og:image" content="{{ .Site.Params.og_image }}"/>
+	{{- end }}
+	
+	<!-- Favicon -->
+	{{- if isset .Site.Params "favicon" }}
+	<link rel="icon" type="image/png" href="{{ .Site.Params.favicon }}">
+	{{- end }}
+
+	<!-- RSS -->
 	{{ with .OutputFormats.Get "rss" -}}
 	{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 	{{ end -}}
 
+	<!-- Social & OpenGraph -->
 	{{- template "_internal/opengraph.html" . -}}
 	{{- template "_internal/twitter_cards.html" . -}}
-	{{ if and (isset .Site.Params "social") (.Site.Params.useCDN | default false) -}}
-		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-	{{- else if or (isset .Site.Params "social") (eq .Site.Params.mode "toggle") -}}
-		<script src="{{ "js/feather.min.js" | relURL }}"></script>
-	{{ end }}
-	{{ if .Site.Params.useCDN | default false -}}
-		<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@1,500&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-	{{- else -}}
-	{{ $fontstyle := resources.Get "css/fonts.css" | fingerprint }}
-        <link href="{{ $fontstyle.RelPermalink }}" rel="stylesheet">
-	{{ end }}
 
+	<!-- Feather Icons -->
+	{{- if and (isset .Site.Params "social") (.Site.Params.useCDN | default false) }}
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	{{- else if or (isset .Site.Params "social") (eq .Site.Params.mode "toggle") }}
+	<script src="{{ "js/feather.min.js" | relURL }}"></script>
+	{{- end }}
+
+	<!-- Fonts -->
+	{{- if .Site.Params.useCDN | default false }}
+	<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.min.css" rel="stylesheet">
+	<!--
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/comic-mono@0.0.1/index.css" rel="stylesheet"> 
+    -->
+	{{- else }}
+	{{ $fontstyle := resources.Get "css/fonts.css" | fingerprint }}
+	<link href="{{ $fontstyle.RelPermalink }}" rel="stylesheet">
+	{{- end }}
+
+	<!-- Main CSS -->
 	{{ $style := resources.Get "css/main.css" | fingerprint }}
 	<link rel="stylesheet" type="text/css" media="screen" href="{{ $style.RelPermalink }}">
 
+	<!-- Dark Mode Support -->
+	{{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") (eq .Site.Params.mode "toggle") }}
+	{{ $darkstyle := resources.Get "css/dark.css" | fingerprint }}
+	<link id="darkModeStyle" rel="stylesheet" type="text/css" href="{{ $darkstyle.RelPermalink }}" 
+		{{- if eq .Site.Params.mode "auto" }}media="(prefers-color-scheme: dark)"{{ end }}
+		{{- if eq .Site.Params.mode "toggle" }}disabled{{ end }}>
+	{{- end }}
 
-	{{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") (eq .Site.Params.mode "toggle") -}}
-		{{ $darkstyle := resources.Get "css/dark.css" | fingerprint }}
-		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="{{ $darkstyle.RelPermalink }}" {{ if eq .Site.Params.mode "auto" }}media="(prefers-color-scheme: dark)"{{ end }} {{ if eq .Site.Params.mode "toggle" }}disabled{{ end }} />
-	{{ end }}
-
-	<!-- Mathjax support -->
-	{{ with .Site.Params.mathjax }}
-		<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-		</script>
-	
-		<!-- inline Mathjax -->
-		<script type="text/x-mathjax-config">
+	<!-- Math Support -->
+	{{- if .Site.Params.mathjax }}
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 			tex2jax: {
 				inlineMath: [['$','$'], ['\\(','\\)']],
@@ -62,44 +77,46 @@
 				processEscapes: true,
 				processEnvironments: true,
 				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-				TeX: { equationNumbers: { autoNumber: "AMS" },
-						 extensions: ["AMSmath.js", "AMSsymbols.js"] }
+				TeX: { 
+					equationNumbers: { autoNumber: "AMS" },
+					extensions: ["AMSmath.js", "AMSsymbols.js"]
+				}
 			}
 		});
-		</script>
-	{{ end }}
+	</script>
+	{{- end }}
 
-	<!-- KaTeX support -->
-	{{ with .Site.Params.katex }}
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-		
-		<!-- inline KaTeX -->
-		<script>
-			document.addEventListener("DOMContentLoaded", function() {
-					renderMathInElement(document.body, {
-							delimiters: [
-									{left: "$$", right: "$$", display: true},
-									{left: "$", right: "$", display: false}
-							]
-					});
+	<!-- KaTeX Support -->
+	{{- if .Site.Params.katex }}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			renderMathInElement(document.body, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false}
+				]
 			});
-			</script>
-	{{ end }}
-	
-	<!-- Custom CSS style get applied last -->
+		});
+	</script>
+	{{- end }}
+
+	<!-- Custom CSS -->
 	{{- if isset .Site.Params "customcss" }}
-		{{ range .Site.Params.customCSS }}
-		{{ $customstyle := resources.Get . | fingerprint }}
-		<link rel="stylesheet" type="text/css" href="{{ $customstyle.RelPermalink }}">
-		{{ end }}
-	{{- end -}}
+	{{- range .Site.Params.customCSS }}
+	{{ $customstyle := resources.Get . | fingerprint }}
+	<link rel="stylesheet" type="text/css" href="{{ $customstyle.RelPermalink }}">
+	{{- end }}
+	{{- end }}
+
+	<!-- Custom JS -->
 	{{- range .Site.Params.customJS }}
 	{{- if or (hasPrefix . "http://") (hasPrefix . "https://") }}
 	<script src="{{ . }}"></script>
-	{{- else if (hasPrefix . "<script")}}
-    {{ .| safeHTML }}
+	{{- else if (hasPrefix . "<script") }}
+	{{ . | safeHTML }}
 	{{- else }}
 	<script src="{{ . | relURL }}"></script>
 	{{- end }}
