@@ -14,6 +14,7 @@ body {
   color: var(--ink-color);
   margin: auto;
   font-family: "Patrick Hand", cursive;
+  font-size: 1.2rem;
   line-height: 1.6;
   max-width: 800px;
   padding: 2rem;
@@ -474,9 +475,6 @@ table td {
 @media (max-width: 768px) {
   body {
     padding: 1rem;
-  }
-
-  p {
     font-size: 1rem;
   }
 
