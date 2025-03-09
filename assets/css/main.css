@@ -35,11 +35,6 @@ body {
   color: #fff;
 }
 
-p {
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
-}
-
 /* Navigation */
 nav {
   background: var(--paper-color);
@@ -143,22 +138,15 @@ figure img {
 
 figure h4 {
   font-size: 1rem;
-  margin: 0.5rem 0;
-  font-style: italic;
+  margin: 0 0 1em 0;
+}
+figure h4::before {
+  content: "↳ ";
 }
 @media screen and (min-width: 600px) {
   figure {
     padding: 0 40px;
   }
-}
-
-figure h4 {
-  font-size: 1rem;
-  margin: 0;
-  margin-bottom: 1em;
-}
-figure h4::before {
-  content: "↳ ";
 }
 
 /* Code blocks */
@@ -182,27 +170,7 @@ pre {
 }
 
 .highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.highlight pre ::selection {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(204, 204, 204, 0.8);
   color: inherit;
 }
 
@@ -501,9 +469,6 @@ table td {
     padding: 1rem;
     font-size: 1rem;
   }
-  p {
-    font-size: 1rem;
-  }
 
   nav {
     padding: 1rem;
@@ -514,6 +479,7 @@ table td {
     font-size: 1.1rem;
     margin: 0 10px;
   }
+
   code {
     font-size: 0.8rem;
   }
