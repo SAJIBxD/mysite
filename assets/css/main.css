@@ -582,3 +582,7 @@ table td {
     font-size: 1.8rem;
   }
 }
+
+details p {
+  padding-left: 2em;
+}
