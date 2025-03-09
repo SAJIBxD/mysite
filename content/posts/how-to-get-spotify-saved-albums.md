@@ -3,18 +3,13 @@ title: "How to Get Spotify Saved Albums"
 date: 2025-03-10T00:18:31+06:00
 ---
 
-{{< lead >}}
 To get a Spotify access token, follow these steps:
-{{< /lead >}}
 
 ### Step 1: Create a Spotify Developer App
-
-{{< alert >}}
 
 1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 2. Log in and click "Create an App"
 3. Note your Client ID and Client Secret
-   {{< /alert >}}
 
 ### Step 2: Get an Access Token
 
