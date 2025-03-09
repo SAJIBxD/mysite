@@ -40,7 +40,7 @@
 				<span class="tags-label">Tags:</span>
 				<ul class="tags-list">
 					{{ range .Params.tags }}
-					<li class="tag-item"><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+					<li class="tag-item"><a href="{{ "tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
 					{{ end }}
 				</ul>
 			</div>
