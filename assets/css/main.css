@@ -183,7 +183,7 @@ pre code {
 
 /* Containers */
 .content {
-  margin-bottom: 4em;
+  margin-bottom: 3em;
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
@@ -585,4 +585,52 @@ table td {
 
 details p {
   padding-left: 2em;
+}
+
+/* Music Page */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-family: "Cascadia Code", monospace;
+  margin: 1rem 0;
+  background-color: #fff;
+}
+.gallery-item {
+  background-color: #fff;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.gallery-item:hover {
+  transform: translateY(-5px);
+}
+.gallery a:hover {
+  border-bottom: none;
+}
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+.gallery p {
+  margin: 0;
+  padding-left: 0.5rem;
+  line-height: 1.5;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
 }

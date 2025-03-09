@@ -1,9 +1,6 @@
 ---
 title: "🎹 Music Albums"
 date: 2023-06-19T20:35:16+06:00
-draft: false
-showdate: false
-showtitle: true
 ---
 
 Here are listed the most recent albums I saved to my Spotify account. Select an album cover to listen to it on Spotify.
@@ -11,6 +8,7 @@ Here are listed the most recent albums I saved to my Spotify account. Select an 
 Sort albums by:
 {{< html >}}
 <select onchange="sortAlbums(this.value);">
+
   <option>(none)</option>
   <option value="title">Title</option>
   <option value="artist">Artist</option>
@@ -18,7 +16,7 @@ Sort albums by:
   <option value="year-desc">Year (descending)</option>
 </select>
 
-<div class="content rounded-border">
+<div class="content">
   <!-- music albums script -->
   <script src="js/music-albums.js"></script>
 
@@ -27,6 +25,5 @@ Sort albums by:
   </div>
 </div>
 {{< /html >}}
-
 Link to generate the JSON file for this page:
 [Get Saved Albums - Spotify](https://developer.spotify.com/console/get-current-user-saved-albums/). The number of albums to retrieve is limited to 50.
