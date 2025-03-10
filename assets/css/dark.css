@@ -1,6 +1,8 @@
 body {
-  color: #ababab;
-  background-color: #1f1f1f;
+  color: #e7e7e7;
+  background-color: var(--darkMaincolor);
+  background-image: linear-gradient(rgba(44, 41, 35, 1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(44, 41, 35, 1) 1px, transparent 1px);
 }
 
 ::-moz-selection {
@@ -83,6 +85,12 @@ footer {
   border-color: #333;
 }
 
+nav {
+  background-color: #1e1d19;
+}
+nav a {
+  color: #e7e7e7;
+}
 .highlight {
   background-color: #333;
 }
@@ -92,50 +100,4 @@ footer {
 .draft-label {
   color: var(--darkMaincolor);
   background-color: blue;
-}
-.highlight pre code[class=language-javaScript]::before,
-.highlight pre code[class="language-js"]::before {
-  content: "js";
-  background: #f7df1e;
-  color: black;
-}
-.highlight pre code[class*='language-yml']::before,
-.highlight pre code[class*='language-yaml']::before {
-  content: 'yaml';
-  background: #f71e6a;
-  color: white;
-}
-.highlight pre code[class*='language-shell']::before,
-.highlight pre code[class*='language-bash']::before,
-.highlight pre code[class*='language-sh']::before {
-  content: 'shell';
-  background: green;
-  color:white
-}
-.highlight pre code[class*='language-json']::before{
-  content: 'json';
-  background: dodgerblue;
-   color: #000000 
-}
-.highlight pre code[class*='language-python']::before,
-.highlight pre code[class*='language-py']::before {
-  content: 'py';
-  background: blue;
-  color: yellow ;
-}
-.highlight pre code[class*='language-css']::before{
-  content: 'css';
-  background: cyan;
-  color: black ;
-}
-.highlight pre code[class*='language-go']::before{
-  content: 'Go';
-  background: cyan;
-  color: royalblue ;
-}
-.highlight pre code[class*='language-md']::before,
-.highlight pre code[class*='language-md']::before{
-  content: 'Markdown';
-  background: royalblue;
-  color: whitesmoke ;
 }
