@@ -7,12 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const copyIconContainer = document.createElement("div");
     copyIconContainer.classList.add("copy-icon");
 
-    // Clone the SVG icon from the template
-    const svgIcon = document.getElementById("copy-icon").cloneNode(true);
-    svgIcon.style.display = "inline"; // Ensure the SVG is visible
-
-    // Append the SVG to the container
-    copyIconContainer.appendChild(svgIcon);
+    // Create copy icon using Feather's direct SVG generation
+    copyIconContainer.innerHTML = feather.icons["copy"].toSvg();
 
     // Add click event to copy code
     copyIconContainer.addEventListener("click", () => {
@@ -41,24 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Function to replace the copy icon with a clipboard icon
 function replaceIconWithClipboard(iconContainer) {
-  // Remove the existing icon
-  iconContainer.innerHTML = "";
-
-  // Clone the clipboard icon from the template
-  const clipboardIcon = document
-    .getElementById("clipboard-icon")
-    .cloneNode(true);
-  clipboardIcon.style.display = "inline"; // Ensure the SVG is visible
-
-  // Append the clipboard icon to the container
-  iconContainer.appendChild(clipboardIcon);
+  // Replace with clipboard icon using Feather's direct SVG generation
+  iconContainer.innerHTML = feather.icons["clipboard"].toSvg();
 
   // Revert to the copy icon after 1.5 seconds
   setTimeout(() => {
-    iconContainer.innerHTML = "";
-    const copyIcon = document.getElementById("copy-icon").cloneNode(true);
-    copyIcon.style.display = "inline";
-    iconContainer.appendChild(copyIcon);
+    iconContainer.innerHTML = feather.icons["copy"].toSvg();
   }, 1500);
 }
 
