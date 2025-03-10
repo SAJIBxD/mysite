@@ -26,6 +26,9 @@
         </div>
       </main>
     </div>
+    {{ if eq .Site.Params.mode "toggle" -}}
+      <script src="{{ "js/themetoggle.js" | relURL }}"></script>
+    {{ end }}
     {{ partial "footer.html" . }}
   </body>
 </html>

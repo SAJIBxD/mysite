@@ -55,6 +55,7 @@ a:hover {
   color: black;
 }
 footer {
+  color: #e7e7e7
   border-top: 1px solid var(--darkMaincolor);
 }
 .site-description a {
@@ -73,7 +74,7 @@ footer {
 }
 
 .title h1 {
-  color: white;
+  color: rgb(218, 217, 217);
 }
 .site-title a {
   color: white;
