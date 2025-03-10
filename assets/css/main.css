@@ -634,3 +634,26 @@ select {
     gap: 1rem;
   }
 }
+
+/* Copy Icon */
+.copy-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  color: #ccc; /* Icon color */
+  transition: color 0.2s;
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+.copy-icon:hover {
+  color: #000; /* Icon color on hover */
+}
+.copy-icon svg {
+  width: 100%; /* Ensure SVG fills the container */
+  height: 100%; /* Ensure SVG fills the container */
+  display: inline; /* Ensure SVG is visible */
+}
