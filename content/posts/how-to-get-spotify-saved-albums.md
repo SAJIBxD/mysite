@@ -1,6 +1,7 @@
 ---
 title: "How to Get Spotify Saved Albums"
 date: 2025-03-10T00:18:31+06:00
+tags: [spotify, api]
 ---
 
 To get a Spotify access token, follow these steps:

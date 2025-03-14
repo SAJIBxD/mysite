@@ -1,10 +1,11 @@
 ---
 title: "Sql for Bank Management"
 date: 2025-02-24T22:48:42+06:00
+tags: [sql, database, tools]
 ---
 
-
 Table Creation Commands:
+
 ```sql
 CREATE TABLE Account (
     branch_name VARCHAR(15) NOT NULL,
@@ -52,6 +53,7 @@ CREATE TABLE Borrower (
 ```
 
 Data Insertion Commands:
+
 ```sql
 Insert INTO Account VALUES ('Downtown', 'A-101', 500);
 Insert INTO Account VALUES ('Mianus', 'A-215', 700);
