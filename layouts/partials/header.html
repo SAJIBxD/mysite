@@ -105,10 +105,8 @@
 
 	<!-- Copy Button -->
 	{{ with resources.Get "js/copy.js" }}
-	    {{ $minifiedScript := . | minify | fingerprint }}
-    <script src="{{ $minifiedScript.Permalink }}" integrity="{{ $minifiedScript.Data.Integrity }}" defer></script>
-	{{ else }}
-    	{{ errorf "copy.js not found in assets/js/" }}
+	{{ $minifiedScript := . | minify | fingerprint }}
+	<script src="{{ $minifiedScript.RelPermalink }}" defer></script>
 	{{ end }}
 
 	<!-- Custom CSS -->
