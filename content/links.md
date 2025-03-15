@@ -14,3 +14,6 @@ draft: false
 [Projects](../projects)  
 [Watchlist](../watchlist)  
 [Tools](../tools)
+
+{{< ytmusic url="https://music.youtube.com/watch?v=Fy5C-bzi59Q" >}}
+{{< ytmusic url="https://music.youtube.com/watch?v=7Y2A3aNyIpc" artist="Seori" >}}

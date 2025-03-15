@@ -1,0 +1,268 @@
+{{- $url := .Get "url" -}}
+{{- $id := replace (replace (index (split $url "?v=") 1) "&list=" " ") " " "" -}}
+{{- $uniqueID := printf "ytmusic-%s" $id -}}
+{{- $thumbnail := printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $id -}}
+{{- $songTitle := .Get "title" | default "Unknown Song" -}}
+{{- $artistName := .Get "artist" | default "Unknown Artist" -}}
+
+<div class="audio-container" data-id="{{ $uniqueID }}">
+  <div class="ytmusic-player">
+    <div class="thumbnail-container">
+      <img src="{{ $thumbnail }}" alt="Song Thumbnail" class="thumbnail"/>
+      <div id="play-pause-toggle-{{ $uniqueID }}" class="play-button" onclick="togglePlay('{{ $uniqueID }}')">
+        <i data-feather="play"></i>
+      </div>
+    </div>
+    <div class="player-info">
+      <div class="title-artist">
+        <span class="song-title">{{ $songTitle }}</span> - <span class="artist-name">{{ $artistName }}</span>
+      </div>
+      <div class="player-controls">
+        <div class="progress-container">
+          <div class="progress-bar" onclick="seekToPosition(event, '{{ $uniqueID }}')">
+            <div class="progress"></div>
+            <div class="progress-handle"></div>
+          </div>
+          <div class="time">
+            <span class="current-time">0:00</span> / <span class="duration">0:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<iframe id="{{ $uniqueID }}" width="0" height="0" src="https://www.youtube.com/embed/{{ $id }}?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+<style>
+  .audio-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .ytmusic-player {
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .thumbnail-container {
+    position: relative;
+    width: 25%;
+    overflow: hidden;
+  }
+  
+  .thumbnail {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%) scale(1.4);
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .player-info {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .title-artist {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background-color: #4d4d4d;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .progress {
+    position: absolute;
+    height: 100%;
+    width: 0;
+    background-color: #fff;
+    border-radius: 2px;
+  }
+  
+  .progress-handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-color: white;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+  }
+  
+  .progress-bar:hover .progress-handle {
+    display: block;
+  }
+  
+  .time {
+    color: #999;
+    min-width: 85px;
+    font-size: 14px;
+  }
+  
+  
+  </style>
+  
+<script>
+let players = {};
+let progressIntervals = {};
+
+function loadYouTubeAPI() {
+  if (!window.YT) {
+    const script = document.createElement('script');
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  }
+}
+
+function onYouTubeIframeAPIReady() {
+  document.querySelectorAll(".audio-container").forEach(container => {
+    const uniqueID = container.dataset.id;
+    players[uniqueID] = new YT.Player(uniqueID, {
+      events: { 'onReady': () => onPlayerReady(uniqueID), 'onStateChange': (e) => onPlayerStateChange(e, uniqueID) },
+      playerVars: { autoplay: 0, controls: 0, showinfo: 0, rel: 0 }
+    });
+  });
+}
+
+function onPlayerReady(uniqueID) {
+  const container = document.querySelector(`[data-id='${uniqueID}']`);
+  const songTitleElement = container.querySelector('.song-title');
+  const artistElement = container.querySelector('.artist-name');
+  
+  // Only update if the current title is "Unknown Song" (user didn't provide a title)
+  if (songTitleElement.innerText === "Unknown Song") {
+    const iframe = document.getElementById(uniqueID);
+    const iframeTitle = iframe.getAttribute('title');
+    
+    if (iframeTitle && iframeTitle.trim() !== '') {
+      songTitleElement.innerText = iframeTitle;
+    } else {
+      // If no iframe title, fetch from API
+      fetchVideoDetails(uniqueID, true);
+    }
+  }
+
+  // Check if artist name needs to be updated
+  if (artistElement.innerText === "Unknown Artist") {
+    fetchVideoDetails(uniqueID, false);
+  }
+
+  // Set duration after a short delay to ensure YouTube API is ready
+  setTimeout(() => {
+    document.querySelector(`[data-id='${uniqueID}'] .duration`).innerText = formatTime(players[uniqueID].getDuration());
+  }, 1000);
+}
+
+function togglePlay(uniqueID) {
+  if (players[uniqueID]) {
+    const isPlaying = players[uniqueID].getPlayerState() === YT.PlayerState.PLAYING;
+    isPlaying ? players[uniqueID].pauseVideo() : players[uniqueID].playVideo();
+    updatePlayButton(uniqueID, !isPlaying);
+  }
+}
+
+function updatePlayButton(uniqueID, isPlaying) {
+  document.getElementById(`play-pause-toggle-${uniqueID}`).innerHTML = isPlaying ? '<i data-feather="pause"></i>' : '<i data-feather="play"></i>';
+  feather.replace();
+}
+
+function seekToPosition(event, uniqueID) {
+  if (!players[uniqueID] || !players[uniqueID].getDuration) return;
+  const progressBar = event.currentTarget;
+  const rect = progressBar.getBoundingClientRect();
+  const percentage = (event.clientX - rect.left) / rect.width;
+  players[uniqueID].seekTo(players[uniqueID].getDuration() * percentage, true);
+}
+
+function onPlayerStateChange(event, uniqueID) {
+  if (event.data === YT.PlayerState.PLAYING) {
+    startProgressAnimation(uniqueID);
+  } else {
+    stopProgressAnimation(uniqueID);
+  }
+}
+
+function startProgressAnimation(uniqueID) {
+  clearInterval(progressIntervals[uniqueID]);
+  progressIntervals[uniqueID] = setInterval(() => {
+    if (!players[uniqueID] || !players[uniqueID].getCurrentTime) return;
+    const progress = (players[uniqueID].getCurrentTime() / players[uniqueID].getDuration()) * 100;
+    document.querySelector(`[data-id='${uniqueID}'] .progress`).style.width = `${progress}%`;
+    document.querySelector(`[data-id='${uniqueID}'] .current-time`).textContent = formatTime(players[uniqueID].getCurrentTime());
+  }, 100);
+}
+
+function stopProgressAnimation(uniqueID) {
+  clearInterval(progressIntervals[uniqueID]);
+}
+
+function formatTime(seconds) {
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+}
+
+function fetchVideoDetails(uniqueID, updateTitle) {
+  const iframe = document.getElementById(uniqueID);
+  const videoId = iframe.src.match(/embed\/([^?]+)/)[1];
+  
+  fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+    .then(response => response.json())
+    .then(data => {
+      const container = document.querySelector(`[data-id='${uniqueID}']`);
+      
+      if (updateTitle) {
+        container.querySelector('.song-title').innerText = data.title || "Unknown Song";
+      }
+      
+      if (container.querySelector('.artist-name').innerText === "Unknown Artist") {
+        container.querySelector('.artist-name').innerText = data.author_name || "Unknown Artist";
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching video details:', error);
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => { feather.replace(); loadYouTubeAPI(); });
+</script>
