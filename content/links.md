@@ -11,9 +11,12 @@ draft: false
 [view](https://drive.google.com/file/d/1G5S2ZwE20ACH9MRlAAebMmgscsNJ5Er_/view?usp=sharing)
 [download](https://drive.google.com/u/0/uc?id=1G5S2ZwE20ACH9MRlAAebMmgscsNJ5Er_&export=download)
 
+**More Pages**
 [Projects](../projects)  
 [Watchlist](../watchlist)  
-[Tools](../tools)
+[Tools](../tools)  
+[Status](../status)
 
 {{< ytmusic url="https://music.youtube.com/watch?v=Fy5C-bzi59Q" >}}
 {{< ytmusic url="https://music.youtube.com/watch?v=7Y2A3aNyIpc" artist="Seori" >}}
+{{< ytmusic url="https://music.youtube.com/watch?v=0xSZCmIOhLw" >}}
