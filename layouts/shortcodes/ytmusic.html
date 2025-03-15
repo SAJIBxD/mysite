@@ -142,59 +142,79 @@
   </style>
   
 <script>
-let players = {};
-let progressIntervals = {};
+// Global state objects
+var players = {};
+var progressIntervals = {};
 
+// YouTube API initialization
 function loadYouTubeAPI() {
   if (!window.YT) {
-    const script = document.createElement('script');
+    var script = document.createElement('script');
     script.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(script);
   }
 }
 
-function onYouTubeIframeAPIReady() {
-  document.querySelectorAll(".audio-container").forEach(container => {
-    const uniqueID = container.dataset.id;
+window.onYouTubeIframeAPIReady = function() {
+  document.querySelectorAll(".audio-container").forEach(function(container) {
+    var uniqueID = container.dataset.id;
     players[uniqueID] = new YT.Player(uniqueID, {
-      events: { 'onReady': () => onPlayerReady(uniqueID), 'onStateChange': (e) => onPlayerStateChange(e, uniqueID) },
-      playerVars: { autoplay: 0, controls: 0, showinfo: 0, rel: 0 }
+      events: { 
+        'onReady': function() { onPlayerReady(uniqueID); }, 
+        'onStateChange': function(e) { onPlayerStateChange(e, uniqueID); }
+      },
+      playerVars: { 
+        autoplay: 0, 
+        controls: 0, 
+        showinfo: 0, 
+        rel: 0 
+      }
     });
   });
-}
+};
 
+// Player event handlers
 function onPlayerReady(uniqueID) {
-  const container = document.querySelector(`[data-id='${uniqueID}']`);
-  const songTitleElement = container.querySelector('.song-title');
-  const artistElement = container.querySelector('.artist-name');
+  var container = document.querySelector("[data-id='" + uniqueID + "']");
+  var songTitleElement = container.querySelector('.song-title');
+  var artistElement = container.querySelector('.artist-name');
   
-  // Only update if the current title is "Unknown Song" (user didn't provide a title)
   if (songTitleElement.innerText === "Unknown Song") {
-    const iframe = document.getElementById(uniqueID);
-    const iframeTitle = iframe.getAttribute('title');
+    var iframe = document.getElementById(uniqueID);
+    var iframeTitle = iframe.getAttribute('title');
     
     if (iframeTitle && iframeTitle.trim() !== '') {
       songTitleElement.innerText = iframeTitle;
     } else {
-      // If no iframe title, fetch from API
       fetchVideoDetails(uniqueID, true);
     }
   }
 
-  // Check if artist name needs to be updated
   if (artistElement.innerText === "Unknown Artist") {
     fetchVideoDetails(uniqueID, false);
   }
 
-  // Set duration after a short delay to ensure YouTube API is ready
-  setTimeout(() => {
-    document.querySelector(`[data-id='${uniqueID}'] .duration`).innerText = formatTime(players[uniqueID].getDuration());
+  setTimeout(function() {
+    document.querySelector("[data-id='" + uniqueID + "'] .duration").innerText = 
+      formatTime(players[uniqueID].getDuration());
   }, 1000);
 }
 
+function onPlayerStateChange(event, uniqueID) {
+  var state = event.data;
+  if (state === YT.PlayerState.PLAYING) {
+    startProgressAnimation(uniqueID);
+    updatePlayButton(uniqueID, true);
+  } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.ENDED) {
+    stopProgressAnimation(uniqueID);
+    updatePlayButton(uniqueID, false);
+  }
+}
+
+// Player controls
 function togglePlay(uniqueID) {
   if (players[uniqueID]) {
-    const isPlaying = players[uniqueID].getPlayerState() === YT.PlayerState.PLAYING;
+    var isPlaying = players[uniqueID].getPlayerState() === YT.PlayerState.PLAYING;
     isPlaying ? players[uniqueID].pauseVideo() : players[uniqueID].playVideo();
     updatePlayButton(uniqueID, !isPlaying);
   }
@@ -208,40 +228,33 @@ function updatePlayButton(uniqueID, isPlaying) {
 
 function seekToPosition(event, uniqueID) {
   if (!players[uniqueID] || !players[uniqueID].getDuration) return;
-  const progressBar = event.currentTarget;
-  const rect = progressBar.getBoundingClientRect();
-  const percentage = (event.clientX - rect.left) / rect.width;
+  
+  var progressBar = event.currentTarget;
+  var rect = progressBar.getBoundingClientRect();
+  var percentage = (event.clientX - rect.left) / rect.width;
+  
   players[uniqueID].seekTo(players[uniqueID].getDuration() * percentage, true);
 
-  // Use uniqueID to target the specific player's progress elements
-  const container = document.querySelector(`[data-id='${uniqueID}']`);
+  var container = document.querySelector(`[data-id='${uniqueID}']`);
   container.querySelector('.progress').style.width = `${percentage * 100}%`;
   container.querySelector('.progress-handle').style.left = `${percentage * 100}%`;
   
-  // Update play button state
   updatePlayButton(uniqueID, true);
 }
 
-function onPlayerStateChange(event, uniqueID) {
-  const state = event.data;
-  if (state === YT.PlayerState.PLAYING) {
-    startProgressAnimation(uniqueID);
-    updatePlayButton(uniqueID, true);
-  } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.ENDED) {
-    stopProgressAnimation(uniqueID);
-    updatePlayButton(uniqueID, false);
-  }
-}
-
+// Progress animation
 function startProgressAnimation(uniqueID) {
   clearInterval(progressIntervals[uniqueID]);
-  progressIntervals[uniqueID] = setInterval(() => {
+  progressIntervals[uniqueID] = setInterval(function() {
     if (!players[uniqueID] || !players[uniqueID].getCurrentTime) return;
-    const progress = (players[uniqueID].getCurrentTime() / players[uniqueID].getDuration()) * 100;
-    const container = document.querySelector(`[data-id='${uniqueID}']`);
+    
+    var progress = (players[uniqueID].getCurrentTime() / players[uniqueID].getDuration()) * 100;
+    var container = document.querySelector(`[data-id='${uniqueID}']`);
+    
     container.querySelector('.progress').style.width = `${progress}%`;
     container.querySelector('.progress-handle').style.left = `${progress}%`;
-    container.querySelector('.current-time').textContent = formatTime(players[uniqueID].getCurrentTime());
+    container.querySelector('.current-time').textContent = 
+      formatTime(players[uniqueID].getCurrentTime());
   }, 100);
 }
 
@@ -249,37 +262,21 @@ function stopProgressAnimation(uniqueID) {
   clearInterval(progressIntervals[uniqueID]);
 }
 
-document.querySelectorAll('.audio-container').forEach(container => {
-  const uniqueID = container.dataset.id;
-  const progressBar = container.querySelector('.progress-bar');
-  const progressHandle = container.querySelector('.progress-handle');
-
-  progressBar.addEventListener('mouseover', () => {
-    progressHandle.style.display = 'block';
-  });
-
-  progressBar.addEventListener('mouseout', () => {
-    const player = players[uniqueID];
-    if (player && player.getPlayerState() !== YT.PlayerState.PLAYING) {
-      progressHandle.style.display = 'none';
-    }
-  });
-});
-
+// Utility functions
 function formatTime(seconds) {
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
+  var min = Math.floor(seconds / 60);
+  var sec = Math.floor(seconds % 60);
   return `${min}:${sec < 10 ? "0" : ""}${sec}`;
 }
 
 function fetchVideoDetails(uniqueID, updateTitle) {
-  const iframe = document.getElementById(uniqueID);
-  const videoId = iframe.src.match(/embed\/([^?]+)/)[1];
+  var iframe = document.getElementById(uniqueID);
+  var videoId = iframe.src.match(/embed\/([^?]+)/)[1];
   
   fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
     .then(response => response.json())
     .then(data => {
-      const container = document.querySelector(`[data-id='${uniqueID}']`);
+      var container = document.querySelector(`[data-id='${uniqueID}']`);
       
       if (updateTitle) {
         container.querySelector('.song-title').innerText = data.title || "Unknown Song";
@@ -294,5 +291,27 @@ function fetchVideoDetails(uniqueID, updateTitle) {
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => { feather.replace(); loadYouTubeAPI(); });
+// Event listeners
+document.querySelectorAll('.audio-container').forEach(container => {
+  var uniqueID = container.dataset.id;
+  var progressBar = container.querySelector('.progress-bar');
+  var progressHandle = container.querySelector('.progress-handle');
+
+  progressBar.addEventListener('mouseover', function() {
+    progressHandle.style.display = 'block';
+  });
+
+  progressBar.addEventListener('mouseout', function() {
+    var player = players[uniqueID];
+    if (player && player.getPlayerState() !== YT.PlayerState.PLAYING) {
+      progressHandle.style.display = 'none';
+    }
+  });
+});
+
+// Initialize
+window.addEventListener('DOMContentLoaded', function() { 
+  feather.replace(); 
+  loadYouTubeAPI(); 
+});
 </script>
