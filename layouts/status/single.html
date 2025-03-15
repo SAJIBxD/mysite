@@ -1,0 +1,14 @@
+{{ define "main" }}
+<article class="status">
+  <header>
+    <h1 class="status-title">{{ .Title }}</h1>
+    <div class="status-meta">
+      <time>{{ dateFormat "Jan 2, 2006" .Date }}</time>
+      {{ if .Draft }}
+      <span class="draft-label">DRAFT</span>
+      {{ end }}
+    </div>
+  </header>
+  <div class="status-content">{{ .Content }}</div>
+</article>
+{{ end }}

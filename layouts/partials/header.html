@@ -55,8 +55,8 @@
 	{{- end }}
 
 	<!-- Main CSS -->
-	{{ $style := resources.Get "css/main.css" | fingerprint }}
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ $style.RelPermalink }}">
+	{{ $styles := resources.Get "css/main.css" | minify | fingerprint }}
+	<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
 
 	<!-- Dark Mode Support -->
 	{{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") (eq .Site.Params.mode "toggle") }}

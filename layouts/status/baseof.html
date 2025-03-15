@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{ partial "statushead.html" . }}
+  </head>
+  <body>
+    {{- partial "head.html" . -}}
+    <div class="page">
+      {{ partial "statusheader.html" . }} {{ block "main" . }} {{ end }}
+
+      <!-- Pagination -->
+      <div class="center">
+        {{ if not .Site.Params.infiniteScroll }}
+
+        <div class="pagination">{{ block "pagination" . }} {{ end }}</div>
+
+        {{ end }}
+      </div>
+
+      {{ partial "footer.html" . }}
+    </div>
+
+    {{ partial "after-content-js.html" . }}
+  </body>
+</html>

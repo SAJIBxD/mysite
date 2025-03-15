@@ -1,15 +1,6 @@
 <footer>
-  <div class="footer-info">
-    {{ dateFormat "2006" now }} {{ with .Site.Copyright }} {{ . }}
-    {{ end }}
+  <div class="footer">
+    {{ dateFormat "2006" now }} {{ with .Site.Copyright }} {{ . }} {{ end }} 
   </div>
+  <script>feather.replace()</script>
 </footer>
-{{ if not hugo.IsServer }}
-{{ template "_internal/google_analytics.html" . }}
-{{ end }}
-
-{{- if (isset .Site.Params "social") -}}
-<script>
-  feather.replace()
-</script>
-{{- end -}}

@@ -1,0 +1,75 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- todo change jquery -->
+<script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js" type="application/javascript"></script>
+
+<!-- like button -->
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css" integrity="sha384-NvKbDTEnL+A8F/AA5Tc5kmMLSJHUO868P+lDtTpJIeQdGYaUIuLr4lVGOEA1OcMy" crossorigin="anonymous">
+<script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jqueryui/1.12.0/jquery-ui.min.js" type="application/javascript"></script>
+
+<!-- Feather Icons -->
+{{- if and (isset .Site.Params "social") (.Site.Params.useCDN | default false) }}
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+{{- else if or (isset .Site.Params "social") (eq .Site.Params.mode "toggle") }}
+<script src="{{ "js/feather.min.js" | relURL }}"></script>
+{{- end }}
+
+<!-- Dark Mode Support -->
+{{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") (eq .Site.Params.mode "toggle") }}
+{{ $darkstyle := resources.Get "css/dark.css" | fingerprint }}
+<link id="darkModeStyle" rel="stylesheet" type="text/css" href="{{ $darkstyle.RelPermalink }}" 
+    {{- if eq .Site.Params.mode "auto" }}media="(prefers-color-scheme: dark)"{{ end }}
+    {{- if eq .Site.Params.mode "toggle" }}disabled{{ end }}>
+{{- end }}
+
+<!-- Main CSS -->
+{{ $styles := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+
+<!-- the Moments style css file -->
+{{ $options := (dict "targetPath" "css/style.css" "outputStyle" "compressed" "enableSourceMap" true) }}
+{{ $style := resources.Get "style-refractored.scss" | css.Sass $options | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style.RelPermalink }}">
+
+{{ $audioOptions := (dict "targetPath" "css/audio.css" "outputStyle" "compressed" "enableSourceMap" true) }}
+{{ $style_2 := resources.Get "audio.scss" | css.Sass $audioOptions | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style_2.RelPermalink }}">
+
+<!-- fancybox css (js in the end before the body closing tag) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"/>
+
+<!-- videojs -->
+<link href="https://cdn.staticfile.net/video.js/8.6.1/alt/video-js-cdn.min.css" rel="stylesheet" />
+
+<!-- pure.css -->
+{{ $style := resources.Get "css/pure.css" | fingerprint }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ $style.RelPermalink }}">
+
+<!-- CSS for loading animation -->
+{{ if .Site.Params.infiniteScroll }}
+<link rel="stylesheet" href="/style/loading.css">
+{{ end }}
+
+{{/* pangu support: js in the end before the body closing tag */}}
+{{ if .Site.Params.features.pangu }}
+<!-- pangu support -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js"></script>
+{{ end }}
+
+{{ if $.Site.Params.experimental.comment }}
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+{{ end }}
+
+{{ if .Site.Params.features.heti }}
+<link rel="stylesheet" href="/style/heti.min.css">
+<script src="/scripts/heti-addon.min.js"></script>
+{{ end }}
+
+{{/* audio file play */}}
+<script src="/scripts/audio-play.js"></script>
+
+<!-- website title -->
+<title>{{ .Site.Params.title }}</title>
