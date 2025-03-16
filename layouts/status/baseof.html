@@ -6,8 +6,16 @@
   <body>
     {{- partial "head.html" . -}}
     <div class="page">
-      {{ partial "statusheader.html" . }} {{ block "main" . }} {{ end }}
-
+      {{ $background_path :=  "vecteezy_otters-animal-cartoon-illustration_43275003.png" }}
+      {{ with .Site.Params.cover }}
+      {{ $background_path = . }}
+      {{ end }}
+      {{ if resources.Get $background_path }}
+      {{ $background_path = (resources.Get $background_path).RelPermalink }}
+      {{ end }}
+      <div class="jumbotron" style="background-image: url({{ $background_path }});">
+      </div>{{ block "main" . }} {{ end }}
+      
       <!-- Pagination -->
       <div class="center">
         {{ if not .Site.Params.infiniteScroll }}
