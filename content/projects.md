@@ -6,7 +6,8 @@ draft: false
 
 # My React Projects
 
-- Mar 4 - [**MovieApp**](https://my-app-fdd8.onrender.com/) : Search movies from database and add to favorites
+- Mar 4 - [**MovieApp**](https://my-app-fdd8.onrender.com/) : Search movies from database and add to favorites  
+- Mar 26 - [**ChatApp**](https://chat-client-33n1.onrender.com/) : Simple messenging app with react, express and mongodb
 
 # Simple Components
 
