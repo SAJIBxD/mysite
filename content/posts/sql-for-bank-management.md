@@ -37,8 +37,8 @@ CREATE TABLE Depositor (
 );
 
 CREATE TABLE Loan (
-    branch_name VARCHAR(15) NOT NULL,
     loan_number VARCHAR(5),
+    branch_name VARCHAR(15) NOT NULL,
     amount NUMERIC(8),
     PRIMARY KEY (loan_number),
     CHECK (amount >= 0)
