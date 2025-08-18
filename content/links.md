@@ -11,6 +11,10 @@ draft: false
 [view](https://drive.google.com/file/d/1G5S2ZwE20ACH9MRlAAebMmgscsNJ5Er_/view?usp=sharing)
 [download](https://drive.google.com/u/0/uc?id=1G5S2ZwE20ACH9MRlAAebMmgscsNJ5Er_&export=download)
 
+**DBMS**
+[Drive](https://drive.google.com/drive/u/0/folders/1arNsZNDV9LB86Tzd5w8usAJKNyJzDBnF?fbclid=IwY2xjawMPWpxleHRuA2FlbQIxMQABHsd-DtCbNa2o8s8e1mtsnBsoi5uj7MRdNbjgP9kpFzw1riWoRp8cfQ25w1cx_aem_F9NjzYCG_amc_E4ydXSQCg)
+
+
 **More Pages**  
 [Projects](../projects)  
 [Watchlist](../watchlist)  
