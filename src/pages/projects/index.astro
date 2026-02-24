@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const formatDate = (date) =>
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+
+const projects = (await getCollection('projects'))
+	.map((project) => ({
+		...project,
+		date: project.data.pubDate
+	}))
+	.sort((a, b) => b.date - a.date);
+
+const grouped = projects.reduce((acc, project) => {
+	const year = project.date.getFullYear();
+	acc[year] ??= [];
+	acc[year].push(project);
+	return acc;
+}, {});
+
+Object.values(grouped).forEach((list) => {
+	list.sort((a, b) => {
+		const orderA = a.data.order;
+		const orderB = b.data.order;
+
+		if (orderA !== undefined && orderB !== undefined) {
+			return orderA - orderB;
+		}
+		if (orderA !== undefined) {
+			return -1;
+		}
+		if (orderB !== undefined) {
+			return 1;
+		}
+		return b.date - a.date;
+	});
+});
+
+const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+---
+
+<Layout title="Projects" description="Projects" mainClass="flex-1 max-w-3xl mx-auto w-full">
+	<h1 class="text-3xl mb-10">projects</h1>
+
+	<p class="text-[#666] mb-12">
+		A collection of projects I've worked on over the years.
+	</p>
+
+	<section class="space-y-5">
+		{years.map((year, index) => (
+			<>
+				<h2 class="text-xl">{year}</h2>
+				<div class={`flex-1 mb-6 h-px bg-neutral-300${index === 0 ? ' mt-1' : ''}`}></div>
+
+				{grouped[year].map((project) => (
+					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6">
+						<time class="text-xs text-[#666] sm:pt-1">{formatDate(project.date)}</time>
+						<div>
+							<a class="text-lg hover:underline" href={`/projects/${project.slug}/`}>
+								{project.data.title}
+							</a>
+							{project.data.stack ? (
+								<p class="text-xs text-[#666] mt-2">{project.data.stack}</p>
+							) : null}
+							{project.data.summary ? (
+								<p class="text-sm text-[#666] mt-2">{project.data.summary}</p>
+							) : null}
+						</div>
+					</article>
+				))}
+			</>
+		))}
+	</section>
+
+	<p class="text-sm text-[#666] pt-12">
+		All source code is available on my{' '}
+		<a href="https://github.com/yourname" target="_blank" class="text-[#1f1f1f]">GitHub</a>.
+	</p>
+</Layout>

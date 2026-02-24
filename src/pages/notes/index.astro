@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const formatDate = (date) =>
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+
+const notes = (await getCollection('notes'))
+	.map((note) => ({
+		...note,
+		date: note.data.pubDate
+	}))
+	.sort((a, b) => b.date - a.date);
+
+const grouped = notes.reduce((acc, note) => {
+	const year = note.date.getFullYear();
+	acc[year] ??= [];
+	acc[year].push(note);
+	return acc;
+}, {});
+
+const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+---
+
+<Layout title="Notes" description="Notes" mainClass="flex-1 max-w-3xl mx-auto w-full">
+	<h1 class="text-3xl mb-10">notes</h1>
+	<p class="text-[#666] mb-12">
+		A collection of my thoughts on various topics, from software development to life in general.
+	</p>
+
+	<section class="space-y-5">
+		{years.map((year) => (
+			<>
+				<h2 class="text-xl">{year}</h2>
+				<div class="flex-1 mb-6 h-px bg-neutral-300"></div>
+
+				{grouped[year].map((note) => (
+					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6">
+						<time class="text-xs text-[#666] sm:pt-1">{formatDate(note.date)}</time>
+						<div>
+							<a href={`/notes/${note.slug}/`} class="text-lg hover:underline">
+								{note.data.title}
+							</a>
+							{note.data.summary ? (
+								<p class="text-sm text-[#666] mt-2">{note.data.summary}</p>
+							) : null}
+						</div>
+					</article>
+				))}
+			</>
+		))}
+	</section>
+</Layout>

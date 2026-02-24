@@ -1,0 +1,49 @@
+---
+title: Why I prefer simple tools
+description: Why I prefer simple tools
+summary: On choosing boring, understandable tools over clever ones.
+pubDate: 2026-01-14
+---
+
+Over time, I’ve noticed that tools which promise to do everything often end up doing nothing particularly well.
+
+Simple tools are easier to understand, easier to debug, and easier to leave when they stop serving you.
+
+This isn’t an argument against complexity — it’s an argument for clarity.
+
+> “If a tool is hard to explain, it’s usually hard to maintain.”
+
+## Quick takeaways
+
+- Prefer small tools with clear boundaries.
+- Optimize for readability and debuggability.
+- Document decisions while they’re fresh.
+
+## Checklist
+
+1. Can I explain it in one paragraph?
+2. Can a teammate debug it in one sitting?
+3. Can I replace it without rewriting everything?
+
+## Demo code
+
+```python
+# simple, boring, and clear
+def estimate_cost(age, bmi, smoker):
+    base = 120
+    base += (age - 18) * 4
+    base += (bmi - 20) * 3
+    base += 200 if smoker else 0
+    return max(base, 0)
+
+print(estimate_cost(28, 23.4, False))
+```
+
+## Comparison table
+
+| Approach | Clarity | Maintenance |
+| --- | --- | --- |
+| Small tools | High | Low effort |
+| All-in-one suite | Medium | High effort |
+
+← [back to notes](/notes/)
