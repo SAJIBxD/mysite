@@ -1,0 +1,99 @@
+---
+layout: ../../layouts/Layout.astro
+title: Why I prefer simple tools
+description: Why I prefer simple tools
+mainClass: flex-1 max-w-3xl mx-auto w-full
+---
+
+<h1 class="text-3xl mb-2">
+	Why I prefer simple tools
+</h1>
+
+<p class="text-xs text-[#666] mb-10">
+	Jan 14, 2026
+</p>
+
+<article class="space-y-8">
+	<p>
+		Over time, I’ve noticed that tools which promise to do everything
+		often end up doing nothing particularly well.
+	</p>
+
+	<p>
+		Simple tools are easier to understand, easier to debug,
+		and easier to leave when they stop serving you.
+	</p>
+
+	<p>
+		This isn’t an argument against complexity — it’s an argument
+		for clarity.
+	</p>
+
+	<blockquote class="border-l-2 border-[#1f1f1f] pl-4 text-[#666]">
+		“If a tool is hard to explain, it’s usually hard to maintain.”
+	</blockquote>
+
+	<div>
+		<h2 class="text-lg mb-2">Quick takeaways</h2>
+		<ul class="list-disc list-inside space-y-1 text-[#666]">
+			<li>Prefer small tools with clear boundaries.</li>
+			<li>Optimize for readability and debuggability.</li>
+			<li>Document decisions while they’re fresh.</li>
+		</ul>
+	</div>
+
+	<div>
+		<h2 class="text-lg mb-2">Checklist</h2>
+		<ol class="list-decimal list-inside space-y-1 text-[#666]">
+			<li>Can I explain it in one paragraph?</li>
+			<li>Can a teammate debug it in one sitting?</li>
+			<li>Can I replace it without rewriting everything?</li>
+		</ol>
+	</div>
+
+	<div>
+		<h2 class="text-lg mb-2">Demo code</h2>
+		<pre class="text-sm bg-[#efe9df] border border-[#e3dbcf] rounded-md p-4 overflow-x-auto">
+			<code>{`# simple, boring, and clear
+def estimate_cost(age, bmi, smoker):
+    base = 120
+    base += (age - 18) * 4
+    base += (bmi - 20) * 3
+    base += 200 if smoker else 0
+    return max(base, 0)
+
+print(estimate_cost(28, 23.4, False))`}</code>
+		</pre>
+	</div>
+
+	<div>
+		<h2 class="text-lg mb-2">Comparison table</h2>
+		<div class="overflow-x-auto">
+			<table class="w-full text-sm border-collapse">
+				<thead>
+					<tr class="text-left border-b border-[#e3dbcf]">
+						<th class="py-2 pr-4">Approach</th>
+						<th class="py-2 pr-4">Clarity</th>
+						<th class="py-2">Maintenance</th>
+					</tr>
+				</thead>
+				<tbody class="text-[#666]">
+					<tr class="border-b border-[#e3dbcf]">
+						<td class="py-2 pr-4">Small tools</td>
+						<td class="py-2 pr-4">High</td>
+						<td class="py-2">Low effort</td>
+					</tr>
+					<tr>
+						<td class="py-2 pr-4">All-in-one suite</td>
+						<td class="py-2 pr-4">Medium</td>
+						<td class="py-2">High effort</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</article>
+
+<p class="mt-12">
+	<a href="/notes/" class="hover:underline">← back to notes</a>
+</p>
