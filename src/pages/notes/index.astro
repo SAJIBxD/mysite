@@ -32,7 +32,7 @@ const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
 		{years.map((year) => (
 			<>
 				<h2 class="text-xl">{year}</h2>
-				<div class="flex-1 mb-6 h-px bg-neutral-300"></div>
+				<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
 
 				{grouped[year].map((note) => (
 					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6">
