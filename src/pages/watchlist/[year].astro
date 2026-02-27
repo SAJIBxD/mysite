@@ -1,0 +1,155 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+type WatchlistEntry = CollectionEntry<'watchlist'>;
+type WatchlistItem = WatchlistEntry['data']['items'][number];
+
+export async function getStaticPaths() {
+	const entries = await getCollection('watchlist');
+	return entries.map((entry) => ({
+		params: { year: String(entry.data.year) },
+		props: { entry }
+	}));
+}
+
+const { entry } = Astro.props;
+const { year, items } = entry.data;
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
+		date
+	);
+
+const sortedItems: WatchlistItem[] = [...items].sort(
+	(a, b) => b.watchedDate.getTime() - a.watchedDate.getTime()
+);
+const statusClass = (status: WatchlistItem['status']) => {
+	const base = 'rounded-full border px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.08em]';
+	switch (status) {
+		case 'Currently watching':
+			return `${base} border-[#c6dafc] bg-[#e6f0ff] text-[#2b4ea1]`;
+		case 'Finished watching':
+			return `${base} border-[#c8ead4] bg-[#e7f6ec] text-[#2f6b3c]`;
+		case 'Dropped':
+			return `${base} border-[#f6caca] bg-[#fdecec] text-[#9a2f2f]`;
+		case 'On hold':
+			return `${base} border-[#f2ddb2] bg-[#fff4dd] text-[#8b5d15]`;
+		default:
+			return `${base} border-[#ded6cb] bg-[#f3ede4] text-[#5b534a]`;
+	}
+};
+const posterSrc = (poster: WatchlistItem['poster']) =>
+	poster?.startsWith('http') ? poster : `/posters/${poster}`;
+
+const starLabel = (rating: WatchlistItem['rating']) => {
+	if (!rating && rating !== 0) return '—';
+	return `${rating} / 5`;
+};
+
+const starString = (rating: WatchlistItem['rating']) => {
+	if (!rating && rating !== 0) return '';
+	const full = Math.floor(rating);
+	const half = rating % 1 >= 0.5;
+	const empty = 5 - full - (half ? 1 : 0);
+	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
+};
+---
+
+<Layout
+	title={`Watchlist · ${year}`}
+	description={`Watchlist entries from ${year}.`}
+		mainClass="flex-1 max-w-3xl mx-auto w-full"
+>
+	<section class="space-y-3 mb-10">
+		<h1 class="text-3xl">watchlist</h1>
+		<p class="text-[#666] text-sm">{sortedItems.length} titles in {year}</p>
+	</section>
+
+	<section class="space-y-5">
+		<h2 class="text-xl">{year}</h2>
+		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+
+		<section class="grid gap-4">
+		{sortedItems.map((item) => (
+			<article class="js-watchlist-row grid gap-4 border-b pb-4 grid-cols-[5rem_1fr] sm:grid-cols-[90px_1fr]">
+				{item.poster ? (
+					<img
+						class="w-full aspect-[2/3] object-cover rounded border border-[#e3dbcf]"
+						src={posterSrc(item.poster)}
+						alt={`${item.title} poster`}
+						loading="lazy"
+					/>
+				) : null}
+				<div class="watchlist-details">
+					<div class="flex flex-wrap items-baseline gap-2">
+						<span class="js-watchlist-title font-semibold text-base hover:underline" tabindex="0">
+							{item.title} {item.year ? `(${item.year})` : ''}
+						</span>
+						{item.rating || item.rating === 0 ? (
+							<span class="text-xs text-[#666]" aria-label={starLabel(item.rating)}>
+								{starString(item.rating)}
+							</span>
+						) : null}
+					</div>
+					<p class="text-sm text-[#666] mt-1">
+						{item.type} • {formatDate(item.watchedDate)}
+					</p>
+					<div class="flex flex-wrap items-center gap-2 text-xs text-[#666] mt-1">
+						<span class={statusClass(item.status)}>
+							{item.status}
+						</span>
+					</div>
+					{item.review ? <p class="text-sm text-[#6b6156] mt-1">{item.review}</p> : null}
+					{item.audio ? (
+						<audio class="js-watchlist-audio" src={`/audios/${item.audio}`}></audio>
+					) : null}
+				</div>
+			</article>
+		))}
+		</section>
+	</section>
+
+	<p class="text-sm text-[#666] pt-12">
+		<a href="/watchlist/">← back to years</a>
+	</p>
+
+	<script>
+		// @ts-nocheck
+		let currentAudioElement = null;
+
+		const stopAudio = () => {
+			if (!currentAudioElement) return;
+			currentAudioElement.pause();
+			currentAudioElement.currentTime = 0;
+			currentAudioElement = null;
+		};
+
+		const playAudio = (audioElement) => {
+			if (!audioElement) return;
+			if (currentAudioElement && currentAudioElement !== audioElement) {
+				stopAudio();
+			}
+			currentAudioElement = audioElement;
+			audioElement.play();
+		};
+
+		document.querySelectorAll('.js-watchlist-row').forEach((row) => {
+			const title = row.querySelector('.js-watchlist-title');
+			const audioElement = row.querySelector('.js-watchlist-audio');
+			if (!title || !audioElement) return;
+
+			title.addEventListener('mouseenter', () => playAudio(audioElement));
+			title.addEventListener('mouseleave', () => stopAudio());
+			title.addEventListener('focus', () => playAudio(audioElement));
+			title.addEventListener('blur', () => stopAudio());
+			title.addEventListener('keydown', (event) => {
+				if (event.key === 'Enter' || event.key === ' ') {
+					event.preventDefault();
+					playAudio(audioElement);
+				}
+			});
+		});
+	</script>
+</Layout>

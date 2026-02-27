@@ -1,0 +1,186 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+type WatchlistEntry = CollectionEntry<'watchlist'>;
+type WatchlistItem = WatchlistEntry['data']['items'][number];
+type PlannedItem = NonNullable<WatchlistEntry['data']['planned']>[number];
+
+const entries = await getCollection('watchlist');
+const years = entries.map((entry) => entry.data.year).sort((a, b) => b - a);
+const activeYear = years[0];
+const activeEntry = entries.find((entry) => entry.data.year === activeYear);
+const items: WatchlistItem[] = activeEntry?.data.items ?? [];
+const planned: PlannedItem[] = activeEntry?.data.planned ?? [];
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+
+const sortedItems = [...items].sort((a, b) => b.watchedDate.getTime() - a.watchedDate.getTime());
+const statusOrder = ['Currently watching', 'Finished watching', 'On hold', 'Dropped'] as const;
+type WatchStatus = (typeof statusOrder)[number];
+
+const statusLabels: Record<WatchStatus, string> = {
+	'Currently watching': 'Watching',
+	'Finished watching': 'Finished',
+	'On hold': 'On Hold',
+	'Dropped': 'Dropped'
+};
+const groupedByStatus = statusOrder.reduce<Record<WatchStatus, WatchlistItem[]>>((acc, status) => {
+	acc[status] = sortedItems.filter((item) => item.status === status);
+	return acc;
+}, {} as Record<WatchStatus, WatchlistItem[]>);
+const totals = {
+	all: sortedItems.length,
+	watching: groupedByStatus['Currently watching'].length,
+	finished: groupedByStatus['Finished watching'].length,
+	onHold: groupedByStatus['On hold'].length,
+	dropped: groupedByStatus['Dropped'].length
+};
+
+const starString = (rating: number | null | undefined) => {
+	if (!rating && rating !== 0) return '';
+	const full = Math.floor(rating);
+	const half = rating % 1 >= 0.5;
+	const empty = 5 - full - (half ? 1 : 0);
+	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
+};
+---
+
+<Layout title="Watchlist" description="Watchlist by year." mainClass="flex-1 max-w-3xl mx-auto w-full">
+	<h1 class="text-3xl mb-10">watchlist</h1>
+
+	<p class="text-[#666] mb-12">
+		A collection of movies/tvs i've watched, watching or planning to watch.
+	</p>
+	<section class="space-y-5">
+		<h2 class="text-xl">{activeYear}</h2>
+		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<p class="text-[#666] text-sm">
+			{totals.all} titles • {totals.watching} watching • {totals.finished} finished • {totals.onHold} on hold {totals.dropped ? `• ${totals.dropped} dropped` : ''}
+		</p>
+
+		{statusOrder.map((status) => (
+			<div class="mb-10">
+				<h3 class="text-sm uppercase tracking-wider text-[#666] mb-5">
+					{statusLabels[status]} ({groupedByStatus[status].length})
+				</h3>
+
+				{groupedByStatus[status].length ? (
+					<div class="space-y-4">
+						{groupedByStatus[status].map((item) => (
+							<article class="js-watchlist-row grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[90px_1fr_auto] sm:gap-6 border-b pb-4">
+								<time class="text-xs text-[#666] col-span-2 sm:col-span-1 sm:pt-1">
+									{formatDate(item.watchedDate)}
+								</time>
+								<div>
+									<p class="font-medium js-watchlist-title" tabindex="0">
+										{item.title} {item.year ? `(${item.year})` : ''}
+									</p>
+									<p class="text-sm text-[#666] mt-1">{item.type}</p>
+								</div>
+								{item.rating || item.rating === 0 ? (
+									<p class="text-xs text-[#666] text-right justify-self-end sm:pt-1">
+										{starString(item.rating)}
+									</p>
+								) : null}
+								{item.audio ? (
+									<audio class="js-watchlist-audio" src={`/audios/${item.audio}`}></audio>
+								) : null}
+							</article>
+						))}
+					</div>
+				) : (
+					<p class="text-[#666] text-sm">
+						{status === 'Dropped' ? 'Nothing dropped this year.' : 'No titles here yet.'}
+					</p>
+				)}
+			</div>
+		))}
+	</section>
+
+	<section class="space-y-5 mt-14">
+		<h2 class="text-xl">watch pipeline</h2>
+		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<p class="text-[#666] text-sm">{planned.length} planned</p>
+
+		{planned.length ? (
+			<div class="space-y-4">
+				{planned.map((item) => (
+					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6 border-b pb-4">
+						<span class="text-xs text-[#666] sm:pt-1">{item.type}</span>
+						<div>
+							<p class="font-medium">{item.title}</p>
+						</div>
+					</article>
+				))}
+			</div>
+		) : (
+			<p class="text-[#666] text-sm">No planned titles yet.</p>
+		)}
+	</section>
+
+	<section class="space-y-5 mt-14">
+		<h2 class="text-xl">archive</h2>
+		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<div class="space-y-4">
+			{years
+				.filter((year) => year !== activeYear)
+				.map((year) => (
+					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6 border-b pb-4">
+						<span class="text-xs text-[#666] sm:pt-1">year</span>
+						<div class="flex items-center justify-between gap-4">
+							<p>{year}</p>
+							<a href={`/watchlist/${year}/`} class="text-sm text-[#666] hover:underline">
+							View year →
+							</a>
+						</div>
+					</article>
+				))}
+		</div>
+	</section>
+
+	<script>
+		// @ts-nocheck
+		/** @type {HTMLAudioElement | null} */
+		let currentAudioElement = null;
+
+		const stopAudio = () => {
+			if (!currentAudioElement) return;
+			currentAudioElement.pause();
+			currentAudioElement.currentTime = 0;
+			currentAudioElement = null;
+		};
+
+		/**
+		 * @param {HTMLAudioElement | null} audioElement
+		 */
+		const playAudio = (audioElement) => {
+			if (!audioElement) return;
+			if (currentAudioElement && currentAudioElement !== audioElement) {
+				stopAudio();
+			}
+			currentAudioElement = audioElement;
+			audioElement.play();
+		};
+
+		document.querySelectorAll<HTMLElement>('.js-watchlist-row').forEach((row) => {
+			const title = row.querySelector<HTMLElement>('.js-watchlist-title');
+			const audioElement = row.querySelector<HTMLAudioElement>('.js-watchlist-audio');
+			if (!title || !audioElement) return;
+
+			title.addEventListener('mouseenter', () => playAudio(audioElement));
+			title.addEventListener('mouseleave', () => stopAudio());
+			title.addEventListener('focus', () => playAudio(audioElement));
+			title.addEventListener('blur', () => stopAudio());
+			title.addEventListener('keydown', (event) => {
+				if (!(event instanceof KeyboardEvent)) return;
+				if (event.key === 'Enter' || event.key === ' ') {
+					event.preventDefault();
+					playAudio(audioElement);
+				}
+			});
+		});
+	</script>
+</Layout>
