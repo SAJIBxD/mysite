@@ -27,4 +27,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 	<h1 class="text-3xl mb-2">{entry.data.title}</h1>
 	<p class="text-xs text-[#666] mb-10">{formattedDate}</p>
 	<Content />
+	<p class="text-sm">
+		<a href="/notes/">← back to notes</a>
+	</p>
 </Layout>
