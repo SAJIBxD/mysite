@@ -89,9 +89,6 @@ const starString = (rating: number | null | undefined) => {
 										{starString(item.rating)}
 									</p>
 								) : null}
-								{item.audio ? (
-									<audio class="js-watchlist-audio" src={`/audios/${item.audio}`}></audio>
-								) : null}
 							</article>
 						))}
 					</div>
@@ -140,47 +137,4 @@ const starString = (rating: number | null | undefined) => {
 				))}
 		</div>
 	</section>
-
-	<script>
-		// @ts-nocheck
-		/** @type {HTMLAudioElement | null} */
-		let currentAudioElement = null;
-
-		const stopAudio = () => {
-			if (!currentAudioElement) return;
-			currentAudioElement.pause();
-			currentAudioElement.currentTime = 0;
-			currentAudioElement = null;
-		};
-
-		/**
-		 * @param {HTMLAudioElement | null} audioElement
-		 */
-		const playAudio = (audioElement) => {
-			if (!audioElement) return;
-			if (currentAudioElement && currentAudioElement !== audioElement) {
-				stopAudio();
-			}
-			currentAudioElement = audioElement;
-			audioElement.play();
-		};
-
-		document.querySelectorAll<HTMLElement>('.js-watchlist-row').forEach((row) => {
-			const title = row.querySelector<HTMLElement>('.js-watchlist-title');
-			const audioElement = row.querySelector<HTMLAudioElement>('.js-watchlist-audio');
-			if (!title || !audioElement) return;
-
-			title.addEventListener('mouseenter', () => playAudio(audioElement));
-			title.addEventListener('mouseleave', () => stopAudio());
-			title.addEventListener('focus', () => playAudio(audioElement));
-			title.addEventListener('blur', () => stopAudio());
-			title.addEventListener('keydown', (event) => {
-				if (!(event instanceof KeyboardEvent)) return;
-				if (event.key === 'Enter' || event.key === ' ') {
-					event.preventDefault();
-					playAudio(audioElement);
-				}
-			});
-		});
-	</script>
 </Layout>

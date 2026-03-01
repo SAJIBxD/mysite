@@ -103,7 +103,7 @@ const starString = (rating: WatchlistItem['rating']) => {
 					</div>
 					{item.review ? <p class="text-sm text-[#6b6156] mt-1">{item.review}</p> : null}
 					{item.audio ? (
-						<audio class="js-watchlist-audio" src={`/audios/${item.audio}`}></audio>
+						<audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio>
 					) : null}
 				</div>
 			</article>
