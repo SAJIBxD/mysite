@@ -71,14 +71,18 @@ const starString = (rating: number | null | undefined) => {
 					<div class="space-y-4">
 						{groupedByStatus[status].map((item) => (
 							<article class="js-watchlist-row grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[90px_1fr_auto] sm:gap-6 border-b pb-4">
-								<time class="text-xs text-[#666] col-span-2 sm:col-span-1 sm:pt-1">
+								<time class="hidden text-xs text-[#666] sm:col-span-1 sm:block sm:pt-1">
 									{formatDate(item.watchedDate)}
 								</time>
 								<div>
 									<p class="font-medium js-watchlist-title" tabindex="0">
 										{item.title} {item.year ? `(${item.year})` : ''}
 									</p>
-									<p class="text-sm text-[#666] mt-1">{item.type}</p>
+									<p class="text-sm text-[#666] mt-1">
+										{item.type}
+										{item.episodes ? ` • ${item.episodes} EP${item.episodes === 1 ? '' : 's'}` : ''}
+										<span class="sm:hidden"> • {formatDate(item.watchedDate)}</span>
+									</p>
 								</div>
 								{item.rating || item.rating === 0 ? (
 									<p class="text-xs text-[#666] text-right justify-self-end sm:pt-1">
@@ -128,14 +132,10 @@ const starString = (rating: number | null | undefined) => {
 			{years
 				.filter((year) => year !== activeYear)
 				.map((year) => (
-					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6 border-b pb-4">
-						<span class="text-xs text-[#666] sm:pt-1">year</span>
-						<div class="flex items-center justify-between gap-4">
-							<p>{year}</p>
-							<a href={`/watchlist/${year}/`} class="text-sm text-[#666] hover:underline">
-							View year →
-							</a>
-						</div>
+					<article class="border-b">
+						<a href={`/watchlist/${year}/`} class="text-l text-[#666] hover:underline">
+							{year}
+						</a>
 					</article>
 				))}
 		</div>
