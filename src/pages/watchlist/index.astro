@@ -18,25 +18,18 @@ const formatDate = (date: Date) =>
 	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
 
 const sortedItems = [...items].sort((a, b) => b.watchedDate.getTime() - a.watchedDate.getTime());
-const statusOrder = ['Currently watching', 'Finished watching', 'On hold', 'Dropped'] as const;
+const statusOrder = ['Watching', 'Finished', 'On Hold', 'Dropped'] as const;
 type WatchStatus = (typeof statusOrder)[number];
-
-const statusLabels: Record<WatchStatus, string> = {
-	'Currently watching': 'Watching',
-	'Finished watching': 'Finished',
-	'On hold': 'On Hold',
-	'Dropped': 'Dropped'
-};
 const groupedByStatus = statusOrder.reduce<Record<WatchStatus, WatchlistItem[]>>((acc, status) => {
 	acc[status] = sortedItems.filter((item) => item.status === status);
 	return acc;
 }, {} as Record<WatchStatus, WatchlistItem[]>);
 const totals = {
 	all: sortedItems.length,
-	watching: groupedByStatus['Currently watching'].length,
-	finished: groupedByStatus['Finished watching'].length,
-	onHold: groupedByStatus['On hold'].length,
-	dropped: groupedByStatus['Dropped'].length
+	watching: groupedByStatus.Watching.length,
+	finished: groupedByStatus.Finished.length,
+	onHold: groupedByStatus['On Hold'].length,
+	dropped: groupedByStatus.Dropped.length
 };
 
 const starString = (rating: number | null | undefined) => {
@@ -64,7 +57,7 @@ const starString = (rating: number | null | undefined) => {
 		{statusOrder.map((status) => (
 			<div class="mb-10">
 				<h3 class="text-sm uppercase tracking-wider text-[#666] mb-5">
-					{statusLabels[status]} ({groupedByStatus[status].length})
+					{status} ({groupedByStatus[status].length})
 				</h3>
 
 				{groupedByStatus[status].length ? (

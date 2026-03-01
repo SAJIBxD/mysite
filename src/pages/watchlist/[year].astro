@@ -25,21 +25,6 @@ const formatDate = (date: Date) =>
 const sortedItems: WatchlistItem[] = [...items].sort(
 	(a, b) => b.watchedDate.getTime() - a.watchedDate.getTime()
 );
-const statusClass = (status: WatchlistItem['status']) => {
-	const base = 'rounded-full border px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.08em]';
-	switch (status) {
-		case 'Currently watching':
-			return `${base} border-[#c6dafc] bg-[#e6f0ff] text-[#2b4ea1]`;
-		case 'Finished watching':
-			return `${base} border-[#c8ead4] bg-[#e7f6ec] text-[#2f6b3c]`;
-		case 'Dropped':
-			return `${base} border-[#f6caca] bg-[#fdecec] text-[#9a2f2f]`;
-		case 'On hold':
-			return `${base} border-[#f2ddb2] bg-[#fff4dd] text-[#8b5d15]`;
-		default:
-			return `${base} border-[#ded6cb] bg-[#f3ede4] text-[#5b534a]`;
-	}
-};
 const posterSrc = (poster: WatchlistItem['poster']) =>
 	poster?.startsWith('http') ? poster : `/posters/${poster}`;
 
@@ -96,11 +81,7 @@ const starString = (rating: WatchlistItem['rating']) => {
 					<p class="text-sm text-[#666] mt-1">
 						{item.type} • {formatDate(item.watchedDate)}
 					</p>
-					<div class="flex flex-wrap items-center gap-2 text-xs text-[#666] mt-1">
-						<span class={statusClass(item.status)}>
-							{item.status}
-						</span>
-					</div>
+					<div class="flex flex-wrap items-center gap-2 text-xs text-[#666] mt-1"></div>
 					{item.review ? <p class="text-sm text-[#6b6156] mt-1">{item.review}</p> : null}
 					{item.audio ? (
 						<audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio>

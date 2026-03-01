@@ -33,7 +33,7 @@ const watchlist = defineCollection({
 					title: z.string(),
 					year: z.number().optional(),
 					type: z.enum(['Movie', 'TV', 'Korean Drama', 'Japanese Drama', 'Chinese Drama']),
-					status: z.enum(['Currently watching', 'Finished watching', 'Dropped', 'On hold']),
+					status: z.enum(['Watching', 'Finished', 'Dropped', 'On Hold']),
 					watchedDate: z.coerce.date(),
 					episodes: z.number().optional(),
 					rating: z.number().min(0).max(5).optional(),
