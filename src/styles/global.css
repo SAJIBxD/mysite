@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	color-scheme: light dark;
+	--bg: #f6f2ec;
+	--text: #1f1f1f;
+	--muted: #666;
+	--border: #e3dbcf;
+	--surface: #efe9df;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #11110f;
+		--text: #f0ece6;
+		--muted: #b5aea4;
+		--border: #2b2722;
+		--surface: #1a1713;
+	}
+
+	.dark-invert {
+		filter: invert(1) hue-rotate(180deg);
+	}
+}
+
 html,
 body {
 	margin: 0;
@@ -11,6 +34,8 @@ body {
 
 body {
 	font-family: "Libre Baskerville", serif;
+	background: var(--bg);
+	color: var(--text);
 }
 
 .content {
@@ -38,13 +63,13 @@ body {
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: #666;
+	color: var(--muted);
 	margin: 1.5rem 0 0.5rem;
 }
 
 .page-project em {
 	display: block;
-	color: #666;
+	color: var(--muted);
 	font-size: 0.75rem;
 	margin-top: 0.5rem;
 }
@@ -53,7 +78,7 @@ body {
 	margin-top: 1.5rem;
 	width: 100%;
 	border-radius: 0.375rem;
-	border: 1px solid #e6e0d7;
+	border: 1px solid var(--border);
 }
 
 .page-project p {
@@ -62,7 +87,7 @@ body {
 
 .page-project > p:first-of-type {
 	font-size: 0.875rem;
-	color: #666;
+	color: var(--muted);
 	margin: 0 0 2.5rem;
 }
 
@@ -88,14 +113,14 @@ body {
 
 .page-note > p:first-of-type {
 	font-size: 0.75rem;
-	color: #666;
+	color: var(--muted);
 	margin: 0 0 2.5rem;
 }
 
 .page-note ul,
 .page-note ol {
 	list-style-position: inside;
-	color: #666;
+	color: var(--muted);
 	margin: 0.75rem 0;
 	padding: 0;
 }
@@ -105,16 +130,16 @@ body {
 }
 
 .page-note blockquote {
-	border-left: 2px solid #1f1f1f;
+	border-left: 2px solid var(--text);
 	padding-left: 1rem;
-	color: #666;
+	color: var(--muted);
 	margin: 1rem 0;
 }
 
 .page-note pre {
 	font-size: 0.875rem;
-	background: #efe9df;
-	border: 1px solid #e3dbcf;
+	background: var(--surface);
+	border: 1px solid var(--border);
 	border-radius: 0.375rem;
 	padding: 1rem;
 	overflow-x: auto;
@@ -134,7 +159,7 @@ body {
 .page-note th,
 .page-note td {
 	text-align: left;
-	border-bottom: 1px solid #e3dbcf;
+	border-bottom: 1px solid var(--border);
 	padding: 0.5rem 0.75rem 0.5rem 0;
 }
 
