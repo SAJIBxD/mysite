@@ -1,0 +1,53 @@
+---
+title: 'Mastering The Art of Dynamic Programming'
+pubDate: '2026-03-11'
+summary: ''
+description: ''
+---
+
+
+### patern 1: Memoization (top-down approach)
+### patern 2: Tabulation (bottom-up approach)
+
+- min-cost climbing stairs
+- house robber
+
+### patern 3: Grid Problems
+
+- unique paths
+- unique paths II (with obstacles)
+
+grid pattern  
+
+1. 2 dimentional  
+2. movement is restricted  
+3. depends on neighbouring cell  
+4. base case(for edges)  
+
+### pattern 4: Two Sequence
+
+- longest common subsequence
+
+```
+def longest_substring(word1, word2):
+
+    m = len(word1)
+    n = len(word2)
+    
+    prev = [0] * (n+1)
+    curr = [0] * (n+1)
+    
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            if word1[i-1] == word2[j-1]:
+                curr[j] = prev[j-1] + 1
+            else:
+                curr[j] = max(prev[j], curr[j-1])
+        prev = curr
+        
+    return curr[n]
+```
+    
+### pattern 5: Interval DP
+
+- longest palindromic subsequence
