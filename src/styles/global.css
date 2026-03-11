@@ -4,6 +4,7 @@
 	color-scheme: light dark;
 	--bg: #f6f2ec;
 	--text: #1f1f1f;
+  --text-secondary: #000;
 	--muted: #666;
 	--border: #e3dbcf;
 	--surface: #efe9df;
@@ -12,7 +13,8 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--bg: #000;
-		--text: #f0ece6;
+    --text: #e6e6e6;
+    --text-secondary: #999;
 		--muted: #b5aea4;
 		--border: #2b2722;
 		--surface: #1a1713;
@@ -78,6 +80,7 @@ body {
 
 .page p {
 	@apply mt-4;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -103,6 +106,7 @@ body {
 .page li {
 	margin: 0.25rem 0;
   font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
 .page a {
