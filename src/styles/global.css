@@ -16,8 +16,8 @@
     --text: #e6e6e6;
     --text-secondary: #999;
 		--muted: #b5aea4;
-		--border: #2b2722;
-		--surface: #1a1713;
+		--border: #27272a;
+		--surface: #09090b;
 	}
 
 	.dark-invert {
@@ -131,6 +131,7 @@ body {
 
 .page code {
 	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.88em;
 }
 
 .page table {
