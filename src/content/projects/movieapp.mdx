@@ -1,21 +1,60 @@
 ---
 title: MovieApp
 description: MovieApp
-summary: Search movies from a database and add them to favorites.
-stack: React · REST API · Local Storage
+summary: A movie discovery app with search, favorites, and detailed movie pages.
+stack: React · Vite · TMDB API · React Router · Local Storage
 tags: ["Web App", "Personal"]
 pubDate: 2025-03-04
 order: 3
 ---
 
-MovieApp lets you search a movie database and save favorites locally for quick access.
+MovieApp is a React + Vite project I built for browsing movies quickly without a complicated UI.
 
-It focuses on fast search, clean layout, and lightweight state management.
+You can load popular movies, search by title, save favorites, and open a full details page for each movie.
 
 ## Tech Stack
 
-React · REST API · Local Storage
+React · Vite · TMDB API · React Router · Local Storage
 
-## Status
+## Live Demo
 
-Details coming soon.
+[https://my-app-fdd8.onrender.com/](https://my-app-fdd8.onrender.com/)
+
+## Source Code
+
+[https://github.com/SAJIBxD/my-app](https://github.com/SAJIBxD/my-app)
+
+## Screenshot
+
+![MovieApp home screen](/movieapp-home.png)
+
+_Home view of MovieApp deployed on Render._
+
+## What It Does
+
+- Shows popular movies on first load.
+- Lets users search by movie title.
+- Supports add/remove favorite with a heart toggle.
+- Saves favorites in browser local storage.
+- Includes a details page with runtime, genres, rating, budget, and revenue.
+
+## Implementation Notes
+
+- **Routing:** I used React Router for Home, Favorite, and Movie details (`/movie/:id`).
+- **State management:** Favorites are handled through a `MovieContext` so the state stays shared and predictable.
+- **Persistence:** Favorites are synced to `localStorage`, so refresh doesn’t clear everything.
+- **API layer:** Data is fetched from TMDB using env variables (`VITE_API_KEY`, `VITE_BASE_URL`).
+- **Card behavior:** Clicking a card opens details, while the heart button only toggles favorite state.
+
+## Challenges & Learnings
+
+- Getting card interactions right took care (favorite toggle vs navigation click).
+- Reusing one card component in both Home and Favorites kept the UI more consistent.
+- Context + local storage is enough for this scope and keeps the app lightweight.
+
+## Next Improvements
+
+- Add pagination or infinite scroll.
+- Add filters for genre, year, and rating.
+- Improve empty/error states with better loading feedback.
+- Add user auth so favorites can sync across devices.

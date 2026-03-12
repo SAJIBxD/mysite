@@ -10,12 +10,30 @@ order: 2
 
 ChatApp is a real-time messaging app with a lightweight UI and a simple backend for persistence.
 
-It emphasizes responsiveness, clear UX, and reliable socket connections.
+I built it to feel fast and straightforward: send messages instantly, keep the interface clean, and avoid unnecessary complexity.
 
 ## Tech Stack
 
 React · Express · MongoDB · Socket.io
 
-## Status
+## Live Demo
 
-Details coming soon.
+[https://chat-client-33n1.onrender.com/](https://chat-client-33n1.onrender.com/)
+
+## Overview
+
+This project started as a hands-on way for me to learn realtime communication properly instead of just reading about WebSockets.
+
+The core flow is simple: users connect, messages are broadcast through Socket.io, and chat history is stored in MongoDB so conversations are not lost after refresh.
+
+## What I Focused On
+
+- Real-time message delivery with stable socket connections.
+- A minimal UI that stays readable during longer chats.
+- Clean separation between frontend, API routes, and socket logic.
+
+## Next Steps
+
+- Add authentication and private rooms.
+- Add message timestamps and read indicators.
+- Improve mobile layout and keyboard UX.

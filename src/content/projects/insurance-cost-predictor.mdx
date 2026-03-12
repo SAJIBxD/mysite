@@ -7,20 +7,37 @@ tags: ["Machine Learning", "Personal"]
 pubDate: 2026-01-20
 ---
 
-Insurance Cost Predictor is a small ML app that estimates insurance costs from common demographic and health-related inputs. The goal is clarity and learning: understand which features move the price the most, and how a basic regression pipeline behaves end-to-end.
+Insurance Cost Predictor is a small ML app where I tried to solve a practical question: “roughly how much might insurance cost for this profile?”
 
-The model is trained with a clean preprocessing pipeline (categorical encoding + numeric scaling) and evaluated using standard regression metrics. The UI is deployed as a simple web app so anyone can try it without installing anything.
+The main goal was learning by building. I wanted to understand which inputs influence price the most, and how an end-to-end regression pipeline behaves in a real app.
 
 ## Tech Stack
 
 Python · Pandas · NumPy · Scikit-learn · Gradio
 
+## How It Works
+
+- Takes user inputs like age, BMI, smoking status, and other profile fields.
+- Applies preprocessing for numeric and categorical features.
+- Runs inference with a trained regression model.
+- Returns a predicted insurance cost in a simple UI.
+
 ## Deployment
 
 Live demo: [https://huggingface.co/spaces/SajibXD/insurance-cost-predictor](https://huggingface.co/spaces/SajibXD/insurance-cost-predictor)
 
-![Insurance Cost Predictor app interface](/Screenshot_20260224_161708.png)
+![Insurance Cost Predictor app interface](/insurance-cost-predictor.png)
 
 _App interface preview._
 
-[View source on GitHub →](https://github.com/yourname/project)
+## Challenges & Learnings
+
+- Feature preprocessing matters as much as model choice for stable predictions.
+- Model metrics can look fine while individual predictions still need sanity checks.
+- A lightweight interface (Gradio) is great for quickly sharing ML work.
+
+## Next Improvements
+
+- Add clearer input validation and edge-case handling.
+- Track prediction confidence or uncertainty bands.
+- Compare multiple regression models in the UI.
