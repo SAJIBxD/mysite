@@ -49,7 +49,7 @@ const starString = (rating: number | null | undefined) => {
 	</p>
 	<section class="space-y-5">
 		<h2 class="text-xl">{activeYear}</h2>
-		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
 		<p class="text-[#666] text-sm">
 			{totals.all} titles • {totals.watching} watching • {totals.finished} finished • {totals.onHold} on hold {totals.dropped ? `• ${totals.dropped} dropped` : ''}
 		</p>
@@ -63,7 +63,7 @@ const starString = (rating: number | null | undefined) => {
 				{groupedByStatus[status].length ? (
 					<div class="space-y-4">
 						{groupedByStatus[status].map((item) => (
-							<article class="js-watchlist-row grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[90px_1fr_auto] sm:gap-6 border-b pb-4">
+							<article class="js-watchlist-row grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[90px_1fr_auto] sm:gap-6 border-b border-[color:var(--border)] pb-4">
 								<time class="hidden text-xs text-[#666] sm:col-span-1 sm:block sm:pt-1">
 									{formatDate(item.watchedDate)}
 								</time>
@@ -96,13 +96,13 @@ const starString = (rating: number | null | undefined) => {
 
 	<section class="space-y-5 mt-14">
 		<h2 class="text-xl">watch pipeline</h2>
-		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
 		<p class="text-[#666] text-sm">{planned.length} planned</p>
 
 		{planned.length ? (
 			<div class="space-y-4">
 				{planned.map((item) => (
-					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6 border-b pb-4">
+					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6 border-b border-[color:var(--border)] pb-4">
 						<span class="text-xs text-[#666] sm:pt-1">{item.type}</span>
 						<div>
 							<p class="font-medium">{item.title}</p>
@@ -117,12 +117,12 @@ const starString = (rating: number | null | undefined) => {
 
 	<section class="space-y-5 mt-14">
 		<h2 class="text-xl">archive</h2>
-		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
 		<div class="space-y-4">
 			{years
 				.filter((year) => year !== activeYear)
 				.map((year) => (
-					<article class="border-b">
+					<article class="border-b border-[color:var(--border)]">
 						<a href={`/watchlist/${year}/`} class="text-l text-[#666] hover:underline">
 							{year}
 						</a>

@@ -54,11 +54,11 @@ const starString = (rating: WatchlistItem['rating']) => {
 
 	<section class="space-y-5">
 		<h2 class="text-xl">{year}</h2>
-		<div class="flex-1 mb-6 h-px bg-neutral-300 !mt-1"></div>
+		<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
 
 		<section class="grid gap-4">
 		{sortedItems.map((item) => (
-			<article class="js-watchlist-row grid gap-4 border-b pb-4 grid-cols-[5rem_1fr] sm:grid-cols-[90px_1fr]">
+			<article class="js-watchlist-row grid gap-4 border-b border-[color:var(--border)] pb-4 grid-cols-[5rem_1fr] sm:grid-cols-[90px_1fr]">
 				{item.poster ? (
 					<img
 						class="w-full aspect-[2/3] object-cover rounded border border-[#e3dbcf]"
