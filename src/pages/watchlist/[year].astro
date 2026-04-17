@@ -17,14 +17,24 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { year, items } = entry.data;
 
+const allEntries = await getCollection('watchlist');
+const availableYears = allEntries.map((item) => item.data.year).sort((a, b) => b - a);
+const yearIndex = availableYears.indexOf(year);
+const previousYear = yearIndex >= 0 ? availableYears[yearIndex + 1] : undefined;
+const nextYear = yearIndex > 0 ? availableYears[yearIndex - 1] : undefined;
+
+const isMovieType = (type: WatchlistItem['type']) => type === 'Movie';
+
 const formatDate = (date: Date) =>
-	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
-		date
-	);
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
 
 const sortedItems: WatchlistItem[] = [...items].sort(
 	(a, b) => b.watchedDate.getTime() - a.watchedDate.getTime()
 );
+
+const filmItems = sortedItems.filter((item) => isMovieType(item.type));
+const tvItems = sortedItems.filter((item) => !isMovieType(item.type));
+
 const posterSrc = (poster: WatchlistItem['poster']) =>
 	poster?.startsWith('http') ? poster : `/posters/${poster}`;
 
@@ -40,62 +50,136 @@ const starString = (rating: WatchlistItem['rating']) => {
 	const empty = 5 - full - (half ? 1 : 0);
 	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
 };
+
+const filterId = `watchlist-filters-${year}`;
 ---
 
 <Layout
-	title={`Watchlist · ${year}`}
+	title={`${year} Watchlist - Sajib`}
 	description={`Watchlist entries from ${year}.`}
 	mainClass="watchlist-year-page"
 >
 	<header class="page-header">
-		<p class="page-eyebrow">Year archive</p>
+		<p class="page-eyebrow"><a href="/watchlist/">Watchlist</a> / Year</p>
 		<h1 class="page-title">
-			Watchlist<br /><em>{year}</em>
+			<em>{year}</em> in<br />review.
 		</h1>
-		<p class="page-subtitle">{sortedItems.length} titles logged in {year}.</p>
+		<p class="page-subtitle">
+			Everything I watched in {year} - with notes on each.
+		</p>
 	</header>
 
-	<section class="projects-section">
-		<p class="section-label">Entries</p>
-		<div class="watchlist-entry-list">
-			{sortedItems.map((item) => (
-				<article class="watchlist-entry-card js-watchlist-row">
-					{item.poster ? (
-						<img
-							class="watchlist-poster"
-							src={posterSrc(item.poster)}
-							alt={`${item.title} poster`}
-							loading="lazy"
-						/>
-					) : (
-						<div class="watchlist-poster watchlist-poster-placeholder" aria-hidden="true"></div>
-					)}
-					<div class="watchlist-entry-body">
-						<div class="watchlist-entry-head">
-							<h2 class="watchlist-entry-title js-watchlist-title" tabindex="0">
-								{item.title} {item.year ? `(${item.year})` : ''}
-							</h2>
-							<span class="watchlist-rating" aria-label={starLabel(item.rating)}>
-								{item.rating || item.rating === 0 ? starString(item.rating) : '—'}
-							</span>
+	<nav class="year-nav" aria-label="Year navigation">
+		{previousYear ? (
+			<a href={`/watchlist/${previousYear}/`} class="year-nav-link prev">{previousYear}</a>
+		) : (
+			<span class="year-nav-link prev" style="opacity:.3; pointer-events:none;">-</span>
+		)}
+		<span class="year-nav-center">{year}</span>
+		{nextYear ? (
+			<a href={`/watchlist/${nextYear}/`} class="year-nav-link next">{nextYear}</a>
+		) : (
+			<span class="year-nav-link next" style="opacity:.3; pointer-events:none;">-</span>
+		)}
+	</nav>
+
+	<div class="filters" role="tablist" id={filterId}>
+		<button class="filter-btn active" data-show="all" type="button">All</button>
+		<button class="filter-btn" data-show="film" type="button">Films</button>
+		<button class="filter-btn" data-show="tv" type="button">TV Shows</button>
+	</div>
+
+	<section class="items-section">
+		{filmItems.length ? (
+			<div class="items-subsection" data-type="film">
+				<p class="section-label">Films</p>
+				{filmItems.map((item) => (
+					<article class="item-card js-watchlist-row">
+						{item.poster ? (
+							<>
+								<img
+									class="item-poster"
+									src={posterSrc(item.poster)}
+									alt={`${item.title} poster`}
+									loading="lazy"
+									onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+								/>
+								<div class="item-poster-placeholder" style="display:none;"><span>No poster</span></div>
+							</>
+						) : (
+							<div class="item-poster-placeholder"><span>No poster</span></div>
+						)}
+						<div class="item-info">
+							<div class="item-header">
+								<h2 class="item-title js-watchlist-title" tabindex="0">{item.title}</h2>
+								<div class="item-badges">
+									<span class="item-type">Film</span>
+									<span class="item-year-badge">{item.year ?? year}</span>
+								</div>
+								<span class="item-stars" aria-label={starLabel(item.rating)}>
+									{item.rating || item.rating === 0 ? starString(item.rating) : item.status}
+								</span>
+								<p class="item-review">{item.review ?? 'No review added yet.'}</p>
+							</div>
+							<div class="item-footer">
+								<span class="item-director">
+									{item.type} · {formatDate(item.watchedDate)}
+								</span>
+							</div>
+							{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
 						</div>
-						<p class="watchlist-entry-meta">{item.type} - {formatDate(item.watchedDate)}</p>
-						{item.episodes ? (
-							<p class="watchlist-entry-meta">{item.episodes} EP{item.episodes === 1 ? '' : 's'}</p>
-						) : null}
-						{item.review ? <p class="watchlist-entry-review">{item.review}</p> : null}
-						{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
-					</div>
-				</article>
-			))}
-		</div>
+					</article>
+				))}
+			</div>
+		) : null}
+
+		{tvItems.length ? (
+			<div class="items-subsection" data-type="tv">
+				<p class="section-label">TV Shows</p>
+				{tvItems.map((item) => (
+					<article class="item-card js-watchlist-row">
+						{item.poster ? (
+							<>
+								<img
+									class="item-poster"
+									src={posterSrc(item.poster)}
+									alt={`${item.title} poster`}
+									loading="lazy"
+									onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+								/>
+								<div class="item-poster-placeholder" style="display:none;"><span>No poster</span></div>
+							</>
+						) : (
+							<div class="item-poster-placeholder"><span>No poster</span></div>
+						)}
+						<div class="item-info">
+							<div class="item-header">
+								<h2 class="item-title js-watchlist-title" tabindex="0">{item.title}</h2>
+								<div class="item-badges">
+									<span class="item-type tv">TV</span>
+									<span class="item-year-badge">
+										{item.episodes ? `${item.episodes} EP${item.episodes === 1 ? '' : 's'} · ` : ''}{item.year ?? year}
+									</span>
+								</div>
+								<span class="item-stars" aria-label={starLabel(item.rating)}>
+									{item.rating || item.rating === 0 ? starString(item.rating) : item.status}
+								</span>
+								<p class="item-review">{item.review ?? 'No review added yet.'}</p>
+							</div>
+							<div class="item-footer">
+								<span class="item-director">
+									{item.type} · {formatDate(item.watchedDate)}
+								</span>
+							</div>
+							{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
+						</div>
+					</article>
+				))}
+			</div>
+		) : null}
 	</section>
 
-	<p class="back-link">
-		<a href="/watchlist/">← Back to years</a>
-	</p>
-
-	<script>
+	<script define:vars={{ filterId }}>
 		// @ts-nocheck
 		let currentAudioElement = null;
 
@@ -114,6 +198,26 @@ const starString = (rating: WatchlistItem['rating']) => {
 			currentAudioElement = audioElement;
 			audioElement.play();
 		};
+
+		const filterRoot = document.getElementById(filterId);
+		const sections = document.querySelectorAll('.items-subsection');
+		if (filterRoot) {
+			filterRoot.querySelectorAll('.filter-btn').forEach((button) => {
+				button.addEventListener('click', () => {
+					filterRoot.querySelectorAll('.filter-btn').forEach((btn) => btn.classList.remove('active'));
+					button.classList.add('active');
+					const type = button.getAttribute('data-show');
+
+					sections.forEach((section) => {
+						if (type === 'all' || section.getAttribute('data-type') === type) {
+							section.classList.remove('hidden');
+						} else {
+							section.classList.add('hidden');
+						}
+					});
+				});
+			});
+		}
 
 		document.querySelectorAll('.js-watchlist-row').forEach((row) => {
 			const title = row.querySelector('.js-watchlist-title');

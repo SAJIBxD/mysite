@@ -8,35 +8,20 @@ type WatchlistItem = WatchlistEntry['data']['items'][number];
 type PlannedItem = NonNullable<WatchlistEntry['data']['planned']>[number];
 
 const entries = await getCollection('watchlist');
-const years = entries.map((entry) => entry.data.year).sort((a, b) => b - a);
+const sortedEntries = [...entries].sort((a, b) => b.data.year - a.data.year);
+const years = sortedEntries.map((entry) => entry.data.year);
 const activeYear = years[0];
-const activeEntry = entries.find((entry) => entry.data.year === activeYear);
+const activeEntry = sortedEntries.find((entry) => entry.data.year === activeYear);
 const items: WatchlistItem[] = activeEntry?.data.items ?? [];
 const planned: PlannedItem[] = activeEntry?.data.planned ?? [];
 
-const formatDate = (date: Date) =>
-	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+const allItems = sortedEntries.flatMap((entry) => entry.data.items);
 
-const formatDateForCard = (date: Date) => {
-	const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
-	const year = new Intl.DateTimeFormat('en-US', { year: 'numeric' }).format(date);
-	return { month, year };
-};
+const isMovieType = (type: WatchlistItem['type'] | PlannedItem['type']) => type === 'Movie';
 
-const sortedItems = [...items].sort((a, b) => b.watchedDate.getTime() - a.watchedDate.getTime());
-const statusOrder = ['Watching', 'Finished', 'On Hold', 'Dropped'] as const;
-type WatchStatus = (typeof statusOrder)[number];
-const groupedByStatus = statusOrder.reduce<Record<WatchStatus, WatchlistItem[]>>((acc, status) => {
-	acc[status] = sortedItems.filter((item) => item.status === status);
-	return acc;
-}, {} as Record<WatchStatus, WatchlistItem[]>);
-const totals = {
-	all: sortedItems.length,
-	watching: groupedByStatus.Watching.length,
-	finished: groupedByStatus.Finished.length,
-	onHold: groupedByStatus['On Hold'].length,
-	dropped: groupedByStatus.Dropped.length
-};
+const totalMovies = allItems.filter((item) => isMovieType(item.type)).length;
+const totalShows = allItems.length - totalMovies;
+const totalPlanned = sortedEntries.reduce((sum, entry) => sum + (entry.data.planned?.length ?? 0), 0);
 
 const starString = (rating: number | null | undefined) => {
 	if (!rating && rating !== 0) return '';
@@ -45,95 +30,131 @@ const starString = (rating: number | null | undefined) => {
 	const empty = 5 - full - (half ? 1 : 0);
 	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
 };
+
+const sortedItems = [...items].sort((a, b) => b.watchedDate.getTime() - a.watchedDate.getTime());
+const activePlanned = [...planned];
+
+const currentYearRows = [
+	...sortedItems.map((item) => ({
+		kind: 'watched' as const,
+		item,
+		labelType: isMovieType(item.type) ? 'Film' : 'TV',
+		subline: `${item.year ?? activeYear} · ${item.type}`,
+		ratingLabel:
+			item.rating || item.rating === 0
+				? starString(item.rating)
+				: item.status === 'Watching'
+					? 'Watching'
+					: item.status,
+		dotClass: item.status === 'Finished' ? 'done' : item.status === 'Watching' ? 'watching' : ''
+	})),
+	...activePlanned.map((item) => ({
+		kind: 'planned' as const,
+		item,
+		labelType: isMovieType(item.type) ? 'Film' : 'TV',
+		subline: `${item.year ?? activeYear} · Planned`,
+		ratingLabel: 'To watch',
+		dotClass: ''
+	}))
+];
+
+const yearStats = sortedEntries.map((entry) => {
+	const yearItems = entry.data.items;
+	const movies = yearItems.filter((item) => isMovieType(item.type)).length;
+	const shows = yearItems.length - movies;
+	const watching = yearItems.filter((item) => item.status === 'Watching').length;
+	const plannedCount = entry.data.planned?.length ?? 0;
+	const inProgress = watching;
+	const allFinished = yearItems.length > 0 && yearItems.every((item) => item.status === 'Finished');
+
+	return {
+		year: entry.data.year,
+		movies,
+		shows,
+		plannedCount,
+		inProgress,
+		allFinished
+	};
+});
 ---
 
-<Layout title="Watchlist - Sajib" description="Watchlist by year." mainClass="watchlist-page">
+<Layout title="Watchlist - Sajib" description="Movies and TV shows logged by year." mainClass="watchlist-page">
 	<header class="page-header">
-		<p class="page-eyebrow">Screen diary</p>
+		<p class="page-eyebrow">Watching log</p>
 		<h1 class="page-title">
-			What I've been<br /><em>watching.</em>
+			What I've<br /><em>watched.</em>
 		</h1>
 		<p class="page-subtitle">
-			A collection of movies and shows I've watched, currently watching, or queued for later.
-		</p>
-		<p class="page-subtitle page-subtitle--mono">
-			{totals.all} titles - {totals.watching} watching - {totals.finished} finished - {totals.onHold} on hold{totals.dropped ? ` - ${totals.dropped} dropped` : ''}
+			Movies and TV shows I've seen, am watching, or plan to watch - logged by year.
 		</p>
 	</header>
 
-	<section class="notes-section">
-		<p class="section-label">{activeYear}</p>
-		{statusOrder.map((status) => (
-			<div class="watchlist-group">
-				<h2 class="watchlist-group-title">
-					{status} ({groupedByStatus[status].length})
-				</h2>
-
-				{groupedByStatus[status].length ? (
-					<div class="note-list">
-						{groupedByStatus[status].map((item) => {
-							const cardDate = formatDateForCard(item.watchedDate);
-							return (
-								<article class="note-card js-watchlist-row">
-									<span class="note-date">
-										{cardDate.month}<br />{cardDate.year}
-									</span>
-									<div class="note-body watchlist-body">
-										<h3 class="note-title js-watchlist-title" tabindex="0">
-											{item.title} {item.year ? `(${item.year})` : ''}
-										</h3>
-										<p class="note-snippet">
-											{item.type} - {formatDate(item.watchedDate)}
-											{item.episodes ? ` - ${item.episodes} EP${item.episodes === 1 ? '' : 's'}` : ''}
-										</p>
-									</div>
-									<span class="watchlist-rating">{item.rating || item.rating === 0 ? starString(item.rating) : '—'}</span>
-								</article>
-							);
-						})}
-					</div>
-				) : (
-					<p class="page-subtitle">{status === 'Dropped' ? 'Nothing dropped this year.' : 'No titles here yet.'}</p>
-				)}
+	<section class="stats-section">
+		<p class="section-label">All time</p>
+		<div class="stats-grid">
+			<div class="stat-cell">
+				<span class="stat-num"><em>{totalMovies}</em></span>
+				<span class="stat-label">Movies</span>
 			</div>
-		))}
+			<div class="stat-cell">
+				<span class="stat-num"><em>{totalShows}</em></span>
+				<span class="stat-label">TV Shows</span>
+			</div>
+			<div class="stat-cell">
+				<span class="stat-num">{years.length}</span>
+				<span class="stat-label">Years logged</span>
+			</div>
+			<div class="stat-cell">
+				<span class="stat-num"><em>{totalPlanned}</em></span>
+				<span class="stat-label">Up next</span>
+			</div>
+		</div>
 	</section>
 
-	<section class="projects-section watchlist-split-section">
-		<p class="section-label">Watch pipeline ({planned.length})</p>
-		{planned.length ? (
-			<div class="project-list">
-				{planned.map((item, index) => (
-					<article class="project-card watchlist-plan-card">
-						<span class="project-num">{String(index + 1).padStart(2, '0')}</span>
-						<div class="project-body">
-							<h3 class="project-title">{item.title}</h3>
-							<p class="project-desc">{item.type}{item.year ? ` - ${item.year}` : ''}</p>
+	<section class="current-section">
+		<p class="section-label">{activeYear} - in progress</p>
+		{currentYearRows.length ? (
+			<div class="watch-list">
+				{currentYearRows.map((row) => (
+					<div class="watch-row">
+						<span class={`watch-dot ${row.dotClass}`}></span>
+						<div class="watch-body">
+							<p class="watch-title">{row.item.title}</p>
+							<div class="watch-meta">
+								<span class={`watch-type ${row.labelType === 'TV' ? 'tv' : ''}`}>{row.labelType}</span>
+								<span class="watch-sub">{row.subline}</span>
+							</div>
 						</div>
-						<span class="project-arrow">→</span>
-					</article>
+						<span class="watch-rating">{row.ratingLabel || '—'}</span>
+					</div>
 				))}
 			</div>
 		) : (
-			<p class="page-subtitle">No planned titles yet.</p>
+			<p class="page-subtitle">No titles logged yet for this year.</p>
 		)}
 	</section>
 
-	<section class="projects-section watchlist-split-section">
-		<p class="section-label">Archive</p>
-		<div class="project-list">
-			{years
-				.filter((year) => year !== activeYear)
-				.map((year, index) => (
-					<a href={`/watchlist/${year}/`} class="project-card watchlist-archive-card">
-						<span class="project-num">{String(index + 1).padStart(2, '0')}</span>
-						<div class="project-body">
-							<h3 class="project-title">{year}</h3>
-							<p class="project-desc">View entries from {year}</p>
-						</div>
-						<span class="project-arrow">→</span>
-					</a>
-				))}
+	<section class="years-section">
+		<p class="section-label">Browse by year</p>
+		<div class="year-index">
+			{yearStats.map((entry) => (
+				<a href={`/watchlist/${entry.year}/`} class="year-row">
+					<span class="year-num">{entry.year}</span>
+					<div class="year-counts">
+						<span class="year-count-line">
+							<span>{entry.movies}</span> movies · <span>{entry.shows}</span> shows
+						</span>
+						<span class="year-count-line">
+							{entry.inProgress || entry.plannedCount
+								? `${entry.inProgress} in progress · ${entry.plannedCount} planned`
+								: entry.allFinished
+									? 'All finished'
+									: 'No entries'}
+						</span>
+					</div>
+					<span class="year-arrow">→</span>
+				</a>
+			))}
 		</div>
 	</section>
 </Layout>
