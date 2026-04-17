@@ -2,17 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="lost cat" description="Page not found" mainClass="flex-1 grid gap-12 md:grid-cols-[45%_55%] items-center">
-	<div class="flex justify-center">
-		<img src="/cat_lost.png" alt="Lost cat illustration" class="max-w-[330px] w-full h-auto dark-invert" />
-	</div>
-
-	<div>
-		<h1 class="text-3xl mb-4">404: this cat ate your page</h1>
-		<p class="text-[#666] mb-8">We checked under the couch, behind the curtains, and inside a cardboard box. Still nothing.</p>
-
-		<p class="mt-12">
-			<a href="/" class="hover:underline">← take me home</a>
+<Layout title="Lost cat" description="Page not found" mainClass="not-found-page">
+	<header class="page-header">
+		<p class="page-eyebrow">404</p>
+		<h1 class="page-title">
+			This cat ate<br /><em>your page.</em>
+		</h1>
+		<p class="page-subtitle">
+			We checked under the couch, behind the curtains, and inside a cardboard box. Still nothing.
 		</p>
-	</div>
+	</header>
+
+	<section class="bio">
+		<div class="mascot-wrap">
+			<img src="/cat_lost.png" alt="Lost cat illustration" />
+		</div>
+		<div class="bio-text">
+			<p>The page you are looking for is gone, renamed, or never existed.</p>
+			<p>
+				<a href="/">Return home</a> or browse <a href="/notes/">notes</a> and <a href="/projects/">projects</a>.
+			</p>
+		</div>
+	</section>
 </Layout>

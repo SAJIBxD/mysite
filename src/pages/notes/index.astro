@@ -2,52 +2,50 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
-const formatDate = (date) =>
-	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+const formatDate = (date: Date) => {
+	const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+	const year = new Intl.DateTimeFormat('en-US', { year: 'numeric' }).format(date);
+	return { month, year };
+};
 
 const notes = (await getCollection('notes'))
 	.map((note) => ({
 		...note,
 		date: note.data.pubDate
 	}))
-	.sort((a, b) => b.date - a.date);
-
-const grouped = notes.reduce((acc, note) => {
-	const year = note.date.getFullYear();
-	acc[year] ??= [];
-	acc[year].push(note);
-	return acc;
-}, {});
-
-const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+	.sort((a, b) => b.date.getTime() - a.date.getTime());
 ---
 
-<Layout title="Notes" description="Notes" mainClass="flex-1 max-w-3xl mx-auto w-full">
-	<h1 class="text-3xl mb-10">notes</h1>
-	<p class="text-[#666] mb-12">
-		A collection of my thoughts on various topics, from software development to life in general.
-	</p>
+<Layout title="Notes - Sajib" description="Notes, learnings, and thoughts." mainClass="notes-page">
+	<header class="page-header">
+		<p class="page-eyebrow">Writing</p>
+		<h1 class="page-title">
+			Notes &<br /><em>thoughts.</em>
+		</h1>
+		<p class="page-subtitle">
+			Fragments, learnings, and things I wanted to write down. No particular schedule - just when
+			something feels worth sharing.
+		</p>
+	</header>
 
-	<section class="space-y-5">
-		{years.map((year) => (
-			<>
-				<h2 class="text-xl">{year}</h2>
-				<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
-
-				{grouped[year].map((note) => (
-					<article class="grid grid-cols-1 gap-2 sm:grid-cols-[90px_1fr] sm:gap-6">
-						<time class="text-xs text-[#666] sm:pt-1">{formatDate(note.date)}</time>
-						<div>
-							<a href={`/notes/${note.slug}/`} class="text-lg hover:underline">
-								{note.data.title}
-							</a>
-							{note.data.summary ? (
-								<p class="text-sm text-[#666] mt-2">{note.data.summary}</p>
-							) : null}
+	<section class="notes-section">
+		<p class="section-label">All notes</p>
+		<div class="note-list">
+			{notes.map((note) => {
+				const displayDate = formatDate(note.date);
+				return (
+					<a href={`/notes/${note.slug}/`} class="note-card">
+						<span class="note-date">
+							{displayDate.month}<br />{displayDate.year}
+						</span>
+						<div class="note-body">
+							<h2 class="note-title">{note.data.title}</h2>
+							<p class="note-snippet">{note.data.summary ?? note.data.description ?? 'No summary provided yet.'}</p>
 						</div>
-					</article>
-				))}
-			</>
-		))}
+						<span class="note-arrow">→</span>
+					</a>
+				);
+			})}
+		</div>
 	</section>
 </Layout>

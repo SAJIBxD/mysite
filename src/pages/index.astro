@@ -1,34 +1,68 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const homeLinks = [
+	{
+		href: '/projects/',
+		title: 'Projects',
+		description: "Things I've built and shipped.",
+		external: false
+	},
+	{
+		href: '/notes/',
+		title: 'Notes',
+		description: 'Thoughts, learnings, fragments.',
+		external: false
+	},
+	{
+		href: '/about/',
+		title: 'About',
+		description: 'Who I am and what I care about.',
+		external: false
+	},
+	{
+		href: 'https://github.com/SAJIBxD',
+		title: 'GitHub',
+		description: 'Open source work and experiments.',
+		external: true
+	}
+];
 ---
 
-<Layout title="Home" description="Home" mainClass="flex-1 grid gap-10 md:grid-cols-[40%_60%] items-start">
-	<aside class="flex justify-center">
-		<img
-			src="/cat_with_glasses.png"
-			alt="Cat sketch with glasses"
-			class="max-w-[320px] w-full h-auto dark-invert"
-		/>
-	</aside>
+<Layout title="Sajib — Exploring & Building on the Web" description="Personal website of Sajib." mainClass="home">
+	<section class="hero">
+		<p class="hero-eyebrow">Personal site</p>
+		<h1 class="hero-name">
+			Sajib<br /><em>builds</em><br />the web.
+		</h1>
+		<p class="hero-tagline">Exploring and building on the web, slowly - with curiosity and craft.</p>
+	</section>
 
-	<section class="max-w-[460px]">
-		<p class="text-xl md:text-[1.35rem]">
-			Exploring and building on the web, slowly.
-		</p>
+	<div class="bio">
+		<div class="mascot-wrap">
+			<img src="/cat_with_glasses.png" alt="Cat sketch with glasses - Sajib's mascot" />
+		</div>
+		<div class="bio-text">
+			<p>
+				Hi, I'm Sajib - a web developer who enjoys making things on the internet, learning in
+				public, and the occasional cat doodle.
+			</p>
+			<p>This is my small corner of the web. Take a look around.</p>
+		</div>
+	</div>
 
-		<div class="mt-12 space-y-5 text-base">
-			<a href="/projects/" class="block text-center">
-				projects <span class="text-[#3b5bdb] pl-1">→</span>
-			</a>
-			<a href="/notes/" class="block text-center">
-				notes <span class="text-[#3b5bdb] pl-1">→</span>
-			</a>
-			<a href="https://github.com/SAJIBxD" target="_blank" class="block text-center">
-				github <span class="text-[#3b5bdb] pl-1">→</span>
-			</a>
-			<a href="/about/" class="block text-center">
-				about <span class="text-[#3b5bdb] pl-1">→</span>
-			</a>
+	<section class="links-section">
+		<p class="section-label">Explore</p>
+		<div class="link-grid">
+			{homeLinks.map((link, index) => (
+				<a href={link.href} class="link-card" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}>
+					<span class="link-card-num">{String(index + 1).padStart(2, '0')}</span>
+					<div class="link-card-title">
+						{link.title} <span class="arrow">{link.external ? '↗' : '→'}</span>
+					</div>
+					<p class="link-card-desc">{link.description}</p>
+				</a>
+			))}
 		</div>
 	</section>
 </Layout>

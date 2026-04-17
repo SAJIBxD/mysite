@@ -1,104 +1,86 @@
 ---
 title: 'Typography Test'
 pubDate: '2025-01-01'
-summary: 'This page exists to test every typographic element in your MDX styling. If something looks weird, congratulations—you found a CSS problem.'
-description: 'A test page for verifying typography styles in MDX.'
+summary: 'Every typographic element from the redesign reference page.'
+description: 'Typography reference note with full semantic coverage.'
 ---
 
-
-This page exists to **test every typographic element** in your MDX styling.
-If something looks weird, congratulations—you found a CSS problem.
-
----
+Every typographic element from the redesign reference page. If something looks weird, you found a CSS problem.
 
 ## Headings
 
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-##### Heading 5
-
-###### Heading 6
-
----
+# Heading 1 - The quick brown fox
+## Heading 2 - The quick brown fox
+### Heading 3 - The quick brown fox
+#### Heading 4 - The quick brown fox
+##### Heading 5 - The quick brown fox
+###### Heading 6 - The quick brown fox
 
 ## Paragraph
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
-Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
 
 Another paragraph with **bold text**, *italic text*, ***bold italic***, and `inline code`.
 
 You can also include a [link to example.com](https://example.com).
 
----
-
 ## Blockquote
 
-> This is a blockquote.
+> This is a blockquote. It can span multiple paragraphs, each getting the same italic serif treatment.
 >
-> It can contain multiple paragraphs.
+> The second paragraph sits comfortably inside the same left-border container.
 >
-> — Someone important
-
----
+> - Someone important
 
 ## Horizontal Rule
 
+Content before the rule.
+
 ---
+
+Content after the rule. The section glyph marks the division.
 
 ## Lists
 
-### Unordered List
+### Unordered
 
-* Item one
-* Item two
-* Item three
+- Item one
+- Item two
+- Item three
+  - Nested item
+  - Nested item
+    - Deep nested item
 
-  * Nested item
-  * Nested item
-
-    * Deep nested item
-
-### Ordered List
+### Ordered
 
 1. First item
 2. Second item
 3. Third item
-
    1. Nested ordered item
    2. Another nested item
 
 ### Task List
 
-* [x] Completed task
-* [ ] Incomplete task
-* [ ] Another task
-
----
+- [x] Completed task
+- [ ] Incomplete task
+- [ ] Another task
 
 ## Definition List
 
-Term 1
-: Definition for term 1
-
-Term 2
-: Definition for term 2
-
----
+<dl>
+  <dt>Term 1</dt>
+  <dd>Definition for term 1. This is the explanation of what the term means.</dd>
+  <dt>Term 2</dt>
+  <dd>Definition for term 2. A little more context about the second concept.</dd>
+</dl>
 
 ## Code
 
 ### Inline Code
 
-Use `npm install` to install dependencies.
+Use `npm install` to install dependencies. Then run `npm run dev`.
 
-### Code Block
+### Code Block - JavaScript
 
 ```javascript
 function greet(name) {
@@ -108,17 +90,15 @@ function greet(name) {
 console.log(greet("World"));
 ```
 
-### Another Code Block
+### Code Block - Python
 
 ```python
 def fibonacci(n):
-    a, b = 0, 1
-    for _ in range(n):
-        yield a
-        a, b = b, a + b
+  a, b = 0, 1
+  for _ in range(n):
+    yield a
+    a, b = b, a + b
 ```
-
----
 
 ## Table
 
@@ -128,73 +108,53 @@ def fibonacci(n):
 | Bob     | Designer        | 28  |
 | Charlie | Product Manager | 32  |
 
----
-
 ## Image
 
-![Sample Image](https://picsum.photos/800/400)
+![Sample image](https://picsum.photos/800/400?grayscale)
 
----
+Fig. 01 - Sample image from picsum.photos, filtered to match the paper palette.
 
 ## Inline Elements
 
-This sentence contains **bold**, *italic*, ~~strikethrough~~, `inline code`, and a [link](https://example.com).
-
----
+This sentence contains **bold**, *italic*, ~~strikethrough~~, `inline code`, and a [link](https://example.com). All coexist inside a single paragraph.
 
 ## Footnotes
 
-Here is a statement with a footnote.[^1]
+Here is a statement with a footnote.[^1] And another claim that needs attribution.[^2]
 
-[^1]: This is the footnote content.
-
----
+[^1]: This is the first footnote. It lives at the bottom in small mono text.
+[^2]: This is the second footnote. Both share the same subdued treatment.
 
 ## Details / Collapsible
 
 <details>
-<summary>Click to expand</summary>
-
-Hidden content goes here.
-
-You can include **markdown** inside it.
-
+  <summary>Click to expand</summary>
+  <div class="details-body">
+    <p>Hidden content goes here. You can include markdown inside it - paragraphs, lists, code.</p>
+    <p>This block uses the same border and mono-label system as the rest of the site.</p>
+  </div>
 </details>
-
----
 
 ## Keyboard Keys
 
-Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy.
-
----
+Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy. Press <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> to open the command palette.
 
 ## Abbreviation
 
-<abbr title="HyperText Markup Language">HTML</abbr> is the standard language for web pages.
-
----
+<abbr title="HyperText Markup Language">HTML</abbr> is the standard language for web pages. <abbr title="Cascading Style Sheets">CSS</abbr> handles the presentation.
 
 ## Address
 
 <address>
-John Doe  
-Dhaka, Bangladesh  
-john@example.com
+  John Doe<br />
+  Dhaka, Bangladesh<br />
+  john@example.com
 </address>
 
----
+## Mixed Content
 
-## Mixed Content Example
+> Tip: Good typography makes reading easier.
 
-> **Tip:** Good typography makes reading easier.
->
-> * Keep line length comfortable
-> * Use proper spacing
-> * Choose readable fonts
-
----
-
-## End
-
-If everything above looks good, your typography CSS is probably solid.
+- Keep line length comfortable - around 60-70 characters
+- Use proper spacing between elements
+- Choose readable, characterful fonts

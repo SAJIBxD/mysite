@@ -45,55 +45,54 @@ const starString = (rating: WatchlistItem['rating']) => {
 <Layout
 	title={`Watchlist · ${year}`}
 	description={`Watchlist entries from ${year}.`}
-		mainClass="flex-1 max-w-3xl mx-auto w-full"
+	mainClass="watchlist-year-page"
 >
-	<section class="space-y-3 mb-10">
-		<h1 class="text-3xl">watchlist</h1>
-		<p class="text-[#666] text-sm">{sortedItems.length} titles in {year}</p>
-	</section>
+	<header class="page-header">
+		<p class="page-eyebrow">Year archive</p>
+		<h1 class="page-title">
+			Watchlist<br /><em>{year}</em>
+		</h1>
+		<p class="page-subtitle">{sortedItems.length} titles logged in {year}.</p>
+	</header>
 
-	<section class="space-y-5">
-		<h2 class="text-xl">{year}</h2>
-		<div class="flex-1 mb-6 h-px bg-[color:var(--border)] !mt-1"></div>
-
-		<section class="grid gap-4">
-		{sortedItems.map((item) => (
-			<article class="js-watchlist-row grid gap-4 border-b border-[color:var(--border)] pb-4 grid-cols-[5rem_1fr] sm:grid-cols-[90px_1fr]">
-				{item.poster ? (
-					<img
-						class="w-full aspect-[2/3] object-cover rounded border border-[#e3dbcf]"
-						src={posterSrc(item.poster)}
-						alt={`${item.title} poster`}
-						loading="lazy"
-					/>
-				) : null}
-				<div class="watchlist-details">
-					<div class="flex flex-wrap items-baseline gap-2">
-						<span class="js-watchlist-title font-semibold text-base hover:underline" tabindex="0">
-							{item.title} {item.year ? `(${item.year})` : ''}
-						</span>
-						{item.rating || item.rating === 0 ? (
-							<span class="text-xs text-[#666]" aria-label={starLabel(item.rating)}>
-								{starString(item.rating)}
+	<section class="projects-section">
+		<p class="section-label">Entries</p>
+		<div class="watchlist-entry-list">
+			{sortedItems.map((item) => (
+				<article class="watchlist-entry-card js-watchlist-row">
+					{item.poster ? (
+						<img
+							class="watchlist-poster"
+							src={posterSrc(item.poster)}
+							alt={`${item.title} poster`}
+							loading="lazy"
+						/>
+					) : (
+						<div class="watchlist-poster watchlist-poster-placeholder" aria-hidden="true"></div>
+					)}
+					<div class="watchlist-entry-body">
+						<div class="watchlist-entry-head">
+							<h2 class="watchlist-entry-title js-watchlist-title" tabindex="0">
+								{item.title} {item.year ? `(${item.year})` : ''}
+							</h2>
+							<span class="watchlist-rating" aria-label={starLabel(item.rating)}>
+								{item.rating || item.rating === 0 ? starString(item.rating) : '—'}
 							</span>
+						</div>
+						<p class="watchlist-entry-meta">{item.type} - {formatDate(item.watchedDate)}</p>
+						{item.episodes ? (
+							<p class="watchlist-entry-meta">{item.episodes} EP{item.episodes === 1 ? '' : 's'}</p>
 						) : null}
+						{item.review ? <p class="watchlist-entry-review">{item.review}</p> : null}
+						{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
 					</div>
-					<p class="text-sm text-[#666] mt-1">
-						{item.type} • {formatDate(item.watchedDate)}
-					</p>
-					<div class="flex flex-wrap items-center gap-2 text-xs text-[#666] mt-1"></div>
-					{item.review ? <p class="text-sm text-[#6b6156] mt-1">{item.review}</p> : null}
-					{item.audio ? (
-						<audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio>
-					) : null}
-				</div>
-			</article>
-		))}
-		</section>
+				</article>
+			))}
+		</div>
 	</section>
 
-	<p class="text-sm text-[#666] pt-12">
-		<a href="/watchlist/">← back to years</a>
+	<p class="back-link">
+		<a href="/watchlist/">← Back to years</a>
 	</p>
 
 	<script>
