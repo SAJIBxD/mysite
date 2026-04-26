@@ -1,0 +1,70 @@
+---
+title: FileSync
+description: FileSync
+summary: Multi-user file upload service with JWT sessions, API tokens, and per-user storage quotas.
+stack: FastAPI · Python · JWT · Bcrypt · JSON Storage
+tags: ["API", "Backend", "Personal"]
+pubDate: 2026-04-26
+order: 3
+---
+
+FileSync is a lightweight multi-user file service where each user gets a private upload space and can manage files through both a browser dashboard and API endpoints.
+
+I built it to keep the workflow practical: create user, log in, upload files, open/download/delete them, and also support script-friendly uploads with a long-lived API token.
+
+## Tech Stack
+
+FastAPI · Python · JWT · Bcrypt · JSON Storage
+
+## Live Demo
+
+[https://filesync-foa8.onrender.com/](https://filesync-foa8.onrender.com/)
+
+## Source Code
+
+[https://github.com/SAJIBxD/FileSync](https://github.com/SAJIBxD/FileSync)
+
+## Core Functionality
+
+At its core, FileSync is a file locker per username.
+
+When a user signs up, the app hashes the password with bcrypt (after SHA-256 pre-hashing) and stores a generated API token. After login, the user gets a short-lived JWT for normal dashboard/API actions.
+
+From there, each user can:
+
+- See only their own file list.
+- Upload files to their own directory.
+- Open files inline in browser or download them.
+- Delete files.
+- Rotate API token when needed.
+
+There are two upload modes:
+
+- Session/JWT upload (`/{username}/upload`) for normal signed-in usage.
+- API token upload (`/api/upload`) for automation and scripts.
+
+The frontend pages are intentionally simple and server-rendered templates, but they still provide practical quality-of-life behavior like login persistence (localStorage), one-click open/delete, pasted-text upload as a file, and API token display/rotation.
+
+## How It Works Internally
+
+1. `POST /create-user` validates username + password rules and stores user data in `db.json`.
+2. `POST /{username}/login` verifies password and returns JWT + API token.
+3. Authenticated requests are guarded by dependencies:
+   - JWT guard ensures users can only access their own routes.
+   - API-token guard verifies bearer token matches provided username.
+4. Upload service sanitizes filenames, blocks traversal patterns, auto-renames collisions (`file_1`, `file_2`, ...), and enforces a 100 MB total quota per user.
+5. Files live under `uploads/{username}` and are served inline or as attachments.
+
+## Things I Focused On
+
+- Keeping auth straightforward but safe for a compact project.
+- Preventing common file-system issues (unsafe names, path traversal, overwrite collisions).
+- Supporting both browser usage and script/CLI usage without extra complexity.
+- Making the API easy to understand from the homepage docs and curl examples.
+
+## Next Improvements
+
+- Replace JSON file storage with a real database for better durability and scaling.
+- Add per-file size limits and MIME-type validation.
+- Add token revocation/expiry policies for API tokens.
+- Add tests for auth and file edge cases.
