@@ -143,6 +143,7 @@ nav {
 .page-subtitle--mono {
   font-family: var(--mono);
   letter-spacing: 0.04em;
+  font-size: 0.72rem;
 }
 
 .section-label {
