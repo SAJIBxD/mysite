@@ -579,6 +579,34 @@ footer {
   text-align: right;
 }
 
+
+.stack-section {
+  padding: 3rem 0;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+.stack-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: 0.02em;
+  transition: background 0.15s, border-color 0.15s;
+}
+.badge:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
 .contact-section {
   padding: 3rem 0;
   animation: fadeUp 0.5s 0.3s ease both;
