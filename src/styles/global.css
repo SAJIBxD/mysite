@@ -544,6 +544,41 @@ footer {
   display: block;
 }
 
+.learning-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.learning-label {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 9rem;
+}
+.progress-bar {
+  flex: 1;
+  min-width: 60px;
+  height: 6px;
+  background: var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--ink);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.learning-pct {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  min-width: 2.2rem;
+  text-align: right;
+}
+
 .contact-section {
   padding: 3rem 0;
   animation: fadeUp 0.5s 0.3s ease both;
