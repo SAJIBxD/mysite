@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type WatchlistItem = CollectionEntry<'watchlist'>['data']['items'][number];
+
+interface Props {
+	item: WatchlistItem;
+	year: number;
+	typeLabel: string;
+}
+
+const { item, year, typeLabel } = Astro.props;
+
+const posterUrl = item.poster?.startsWith('http') ? item.poster : item.poster ? `/posters/${item.poster}` : undefined;
+
+const starLabel = (rating: WatchlistItem['rating']) => {
+	if (!rating && rating !== 0) return '—';
+	return `${rating} / 5`;
+};
+
+const starString = (rating: WatchlistItem['rating']) => {
+	if (!rating && rating !== 0) return '';
+	const full = Math.floor(rating);
+	const half = rating % 1 >= 0.5;
+	const empty = 5 - full - (half ? 1 : 0);
+	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
+};
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+
+const badgeText = item.episodes
+	? `${item.episodes} EP${item.episodes === 1 ? '' : 's'} · ${item.year ?? year}`
+	: String(item.year ?? year);
+---
+
+<article class="item-card js-watchlist-row">
+	{posterUrl ? (
+		<>
+			<img
+				class="item-poster"
+				src={posterUrl}
+				alt={`${item.title} poster`}
+				loading="lazy"
+				onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+			/>
+			<div class="item-poster-placeholder" style="display:none;"><span>No poster</span></div>
+		</>
+	) : (
+		<div class="item-poster-placeholder"><span>No poster</span></div>
+	)}
+	<div class="item-info">
+		<div class="item-header">
+			<h2 class="item-title js-watchlist-title" tabindex="0">{item.title}</h2>
+			<div class="item-badges">
+				<span class="item-type">{typeLabel}</span>
+				<span class="item-year-badge">{badgeText}</span>
+			</div>
+			<span class="item-stars" aria-label={starLabel(item.rating)}>
+				{item.rating || item.rating === 0 ? starString(item.rating) : item.status}
+			</span>
+			<p class="item-review">{item.review ?? 'No review added yet.'}</p>
+		</div>
+		<div class="item-footer">
+			<span class="item-director">
+				{item.type} · {formatDate(item.watchedDate)}
+			</span>
+		</div>
+		{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
+	</div>
+</article>

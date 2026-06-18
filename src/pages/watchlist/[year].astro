@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import WatchlistCard from '../../components/WatchlistCard.astro';
 
 type WatchlistEntry = CollectionEntry<'watchlist'>;
 type WatchlistItem = WatchlistEntry['data']['items'][number];
@@ -25,31 +26,12 @@ const nextYear = yearIndex > 0 ? availableYears[yearIndex - 1] : undefined;
 
 const isMovieType = (type: WatchlistItem['type']) => type === 'Movie';
 
-const formatDate = (date: Date) =>
-	new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
-
 const sortedItems: WatchlistItem[] = [...items].sort(
 	(a, b) => b.watchedDate.getTime() - a.watchedDate.getTime()
 );
 
 const filmItems = sortedItems.filter((item) => isMovieType(item.type));
 const tvItems = sortedItems.filter((item) => !isMovieType(item.type));
-
-const posterSrc = (poster: WatchlistItem['poster']) =>
-	poster?.startsWith('http') ? poster : `/posters/${poster}`;
-
-const starLabel = (rating: WatchlistItem['rating']) => {
-	if (!rating && rating !== 0) return '—';
-	return `${rating} / 5`;
-};
-
-const starString = (rating: WatchlistItem['rating']) => {
-	if (!rating && rating !== 0) return '';
-	const full = Math.floor(rating);
-	const half = rating % 1 >= 0.5;
-	const empty = 5 - full - (half ? 1 : 0);
-	return `${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)}`;
-};
 
 const filterId = `watchlist-filters-${year}`;
 ---
@@ -94,41 +76,7 @@ const filterId = `watchlist-filters-${year}`;
 			<div class="items-subsection" data-type="film">
 				<p class="section-label">Films</p>
 				{filmItems.map((item) => (
-					<article class="item-card js-watchlist-row">
-						{item.poster ? (
-							<>
-								<img
-									class="item-poster"
-									src={posterSrc(item.poster)}
-									alt={`${item.title} poster`}
-									loading="lazy"
-									onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-								/>
-								<div class="item-poster-placeholder" style="display:none;"><span>No poster</span></div>
-							</>
-						) : (
-							<div class="item-poster-placeholder"><span>No poster</span></div>
-						)}
-						<div class="item-info">
-							<div class="item-header">
-								<h2 class="item-title js-watchlist-title" tabindex="0">{item.title}</h2>
-								<div class="item-badges">
-									<span class="item-type">Film</span>
-									<span class="item-year-badge">{item.year ?? year}</span>
-								</div>
-								<span class="item-stars" aria-label={starLabel(item.rating)}>
-									{item.rating || item.rating === 0 ? starString(item.rating) : item.status}
-								</span>
-								<p class="item-review">{item.review ?? 'No review added yet.'}</p>
-							</div>
-							<div class="item-footer">
-								<span class="item-director">
-									{item.type} · {formatDate(item.watchedDate)}
-								</span>
-							</div>
-							{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
-						</div>
-					</article>
+					<WatchlistCard item={item} year={year} typeLabel="Film" />
 				))}
 			</div>
 		) : null}
@@ -137,43 +85,7 @@ const filterId = `watchlist-filters-${year}`;
 			<div class="items-subsection" data-type="tv">
 				<p class="section-label">TV Shows</p>
 				{tvItems.map((item) => (
-					<article class="item-card js-watchlist-row">
-						{item.poster ? (
-							<>
-								<img
-									class="item-poster"
-									src={posterSrc(item.poster)}
-									alt={`${item.title} poster`}
-									loading="lazy"
-									onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-								/>
-								<div class="item-poster-placeholder" style="display:none;"><span>No poster</span></div>
-							</>
-						) : (
-							<div class="item-poster-placeholder"><span>No poster</span></div>
-						)}
-						<div class="item-info">
-							<div class="item-header">
-								<h2 class="item-title js-watchlist-title" tabindex="0">{item.title}</h2>
-								<div class="item-badges">
-									<span class="item-type tv">TV</span>
-									<span class="item-year-badge">
-										{item.episodes ? `${item.episodes} EP${item.episodes === 1 ? '' : 's'} · ` : ''}{item.year ?? year}
-									</span>
-								</div>
-								<span class="item-stars" aria-label={starLabel(item.rating)}>
-									{item.rating || item.rating === 0 ? starString(item.rating) : item.status}
-								</span>
-								<p class="item-review">{item.review ?? 'No review added yet.'}</p>
-							</div>
-							<div class="item-footer">
-								<span class="item-director">
-									{item.type} · {formatDate(item.watchedDate)}
-								</span>
-							</div>
-							{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
-						</div>
-					</article>
+					<WatchlistCard item={item} year={year} typeLabel={item.type} />
 				))}
 			</div>
 		) : null}
