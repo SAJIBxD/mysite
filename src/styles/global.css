@@ -228,7 +228,7 @@ footer {
 }
 .hero-name em { font-style: normal; color: var(--accent); }
 .hero-tagline {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 300;
   color: var(--muted);
   max-width: 38ch;
