@@ -1,43 +1,42 @@
 ---
 title: Insurance Cost Predictor
-description: Insurance Cost Predictor
+description: Predicts how much an insurance will cost for you.
 summary: Predicts how much an insurance will cost for you.
 stack: Python · Scikit-learn · Pandas · NumPy
 tags: ["Machine Learning", "Personal"]
 pubDate: 2026-01-20
 ---
 
-Insurance Cost Predictor is a small ML app where I tried to solve a practical question: “roughly how much might insurance cost for this profile?”
+I wanted to answer a practical question: "roughly how much would insurance cost for someone with this profile?" I could've just looked up rate tables, but where's the fun in that?
 
-The main goal was learning by building. I wanted to understand which inputs influence price the most, and how an end-to-end regression pipeline behaves in a real app.
+This is a small ML regression project — my first attempt at taking a model from training to a working web app.
 
 ## Tech Stack
 
 Python · Pandas · NumPy · Scikit-learn · Gradio
 
-## How It Works
+## Live Demo
 
-- Takes user inputs like age, BMI, smoking status, and other profile fields.
-- Applies preprocessing for numeric and categorical features.
-- Runs inference with a trained regression model.
-- Returns a predicted insurance cost in a simple UI.
-
-## Deployment
-
-Live demo: [https://huggingface.co/spaces/SajibXD/insurance-cost-predictor](https://huggingface.co/spaces/SajibXD/insurance-cost-predictor)
+[https://huggingface.co/spaces/SajibXD/insurance-cost-predictor](https://huggingface.co/spaces/SajibXD/insurance-cost-predictor)
 
 ![Insurance Cost Predictor app interface](/insurance-cost-predictor.png)
 
 _App interface preview._
 
-## Challenges & Learnings
+## How It Works
 
-- Feature preprocessing matters as much as model choice for stable predictions.
-- Model metrics can look fine while individual predictions still need sanity checks.
-- A lightweight interface (Gradio) is great for quickly sharing ML work.
+Input your age, BMI, smoking status, and a few other profile fields. The app preprocesses the data (handling categorical features, scaling numerics), runs it through a trained regression model, and spits out a predicted cost.
 
-## Next Improvements
+The UI is built with **Gradio** — I chose it because I wanted something that Just Works without spending a week on frontend code. Hugging Face Spaces handles the hosting.
 
-- Add clearer input validation and edge-case handling.
-- Track prediction confidence or uncertainty bands.
-- Compare multiple regression models in the UI.
+## What I Learned
+
+- **Feature preprocessing matters more than model choice.** A clean pipeline with the right transformations beats a fancier model with sloppy inputs every time.
+- **Model metrics lie.** You can have great looking R² scores and still get individual predictions that make no sense. Sanity-checking outputs is non-negotiable.
+- **Gradio is a cheat code** for putting ML models on the internet fast. It's not pretty, but it works and nobody's judging your UI when the model itself is the interesting part.
+
+## What I'd Add Next
+
+- Better input validation and edge-case handling (what happens when someone enters a negative age?)
+- Prediction confidence intervals — knowing the model is unsure is useful information
+- A mode to compare multiple regression models side by side so you can see how different approaches differ

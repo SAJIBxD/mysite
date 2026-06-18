@@ -4,53 +4,187 @@ pubDate: '2026-03-11'
 summary: 'Some of the most common patterns in dynamic programming problems that will help to build foundation for solving more complex problems.'
 ---
 
-In dynamic programming there is a few pattern that is most commom. If you learn to master them the rest of them becomes easier. 
+I've been grinding LeetCode on and off for a while now, and one thing I keep coming back to is dynamic programming. It's one of those topics that feels impossible until it clicks — and then you realize most problems follow just a handful of patterns.
 
-Today we will talk about 7 most common dp problems
+There's no magic formula here. But if you learn to recognize these 7 patterns, the rest starts falling into place way faster.
 
-## pattern 1: Memoization (top-down approach)
+---
 
-## pattern 2: Tabulation (bottom-up approach)
+## Pattern 1: Memoization (Top-Down Approach)
 
-- min-cost climbing stairs
-- house robber
+This is usually where everyone starts. You write a recursive function that solves the problem, and you cache results so you don't recompute the same subproblem a thousand times.
 
-## pattern 3: Grid Problems
-
-- unique paths
-- unique paths II (with obstacles)
-
-**grid pattern detection signs**
-
-1. 2 dimentional  
-2. movement is restricted  
-3. depends on neighbouring cell  
-4. base case(for edges)  
-
-## pattern 4: Two Sequence
-
-- longest common subsequence
+The trick is figuring out what the "state" is — what parameters change between recursive calls. Those become your cache keys.
 
 ```python
-def longest_substring(word1, word2):
+# fibonacci with memoization
+cache = {}
 
-    m = len(word1)
-    n = len(word2)
-    
-    prev = [0] * (n+1)
-    curr = [0] * (n+1)
-    
-    for i in range(1,m+1):
-        for j in range(1,n+1):
-            if word1[i-1] == word2[j-1]:
-                curr[j] = prev[j-1] + 1
-            else:
-                curr[j] = max(prev[j], curr[j-1])
-        prev = curr
-        
-    return curr[n]
+def fib(n):
+    if n <= 1:
+        return n
+    if n not in cache:
+        cache[n] = fib(n - 1) + fib(n - 2)
+    return cache[n]
 ```
-    
-## pattern 5: Interval DP
 
-- longest palindromic subsequence
+Simple, right? The hard part is training yourself to see the recursion tree before you write the code.
+
+---
+
+## Pattern 2: Tabulation (Bottom-Up Approach)
+
+Tabulation is the "build a table" approach. Instead of recursing down and caching, you start from the base cases and work your way up. No recursion overhead, no stack overflow risk.
+
+Common signs that tabulation will work:
+- The answer depends on previous values in a sequence
+- You can define a recurrence relation
+- You only need the last few states (space optimization possible)
+
+### Min-Cost Climbing Stairs
+
+```python
+def min_cost_climbing(cost):
+    n = len(cost)
+    dp = [0] * (n + 1)
+    for i in range(2, n + 1):
+        dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
+    return dp[n]
+```
+
+### House Robber
+
+```python
+def rob(nums):
+    prev2 = prev1 = 0
+    for n in nums:
+        prev2, prev1 = prev1, max(prev1, prev2 + n)
+    return prev1
+```
+
+Notice how we only keep the last two values. That's the space optimization I mentioned — O(1) instead of O(n).
+
+---
+
+## Pattern 3: Grid Problems
+
+Grid DP is everywhere. The pattern is basically: you're moving through a 2D grid with restricted movement (usually only right and down), and each cell's value depends on its neighbors.
+
+**Detection signs:**
+1. Two-dimensional input (grid, matrix)
+2. Movement is restricted (right/down only, or adjacent cells)
+3. Current cell depends on neighbouring cells
+4. Base cases along edges or corners
+
+### Unique Paths
+
+```python
+def unique_paths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    return dp[m - 1][n - 1]
+```
+
+### Unique Paths II (With Obstacles)
+
+Same idea, but when you hit an obstacle, that cell's value becomes 0.
+
+---
+
+## Pattern 4: Two Sequence
+
+This is the pattern for problems like longest common subsequence, edit distance, wildcard matching — anything where you're comparing two sequences and building a 2D DP table.
+
+```python
+def longest_common_subsequence(word1, word2):
+    m, n = len(word1), len(word2)
+    prev = [0] * (n + 1)
+    curr = [0] * (n + 1)
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if word1[i - 1] == word2[j - 1]:
+                curr[j] = prev[j - 1] + 1
+            else:
+                curr[j] = max(prev[j], curr[j - 1])
+        prev, curr = curr, [0] * (n + 1)
+
+    return prev[n]
+```
+
+The space-optimized version above only keeps two rows — the previous and current. It's a pattern I've reused in at least half a dozen LeetCode problems now.
+
+---
+
+## Pattern 5: Interval DP
+
+Interval DP is for problems where you need to make decisions within subarrays or substrings. The idea is to solve for all intervals of length 1, then 2, then 3, and so on.
+
+### Longest Palindromic Subsequence
+
+```python
+def longest_palindromic_subsequence(s):
+    n = len(s)
+    dp = [[0] * n for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        dp[i][i] = 1
+        for j in range(i + 1, n):
+            if s[i] == s[j]:
+                dp[i][j] = dp[i + 1][j - 1] + 2
+            else:
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
+
+    return dp[0][n - 1]
+```
+
+Key insight here: you iterate the start index `i` from the end to the beginning. That way when you compute `dp[i][j]`, the shorter intervals `dp[i+1][j-1]`, `dp[i+1][j]`, and `dp[i][j-1]` are already computed.
+
+---
+
+## Pattern 6: Knapsack / Partition DP
+
+This is the "should I take it or leave it?" pattern. Classic 0/1 knapsack, subset sum, partition equal subset sum — they all follow the same template.
+
+The state is usually `dp[i][w]` — best value using first `i` items with capacity `w`. Decision: take item `i` or skip it.
+
+```python
+# 0/1 Knapsack — simplified
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [0] * (capacity + 1)
+    for i in range(n):
+        for w in range(capacity, weights[i] - 1, -1):
+            dp[w] = max(dp[w], dp[w - weights[i]] + values[i])
+    return dp[capacity]
+```
+
+The inner loop goes backward — that's the trick that keeps it 0/1 (each item used at most once). If you go forward, it becomes unbounded knapsack.
+
+---
+
+## Pattern 7: Longest Increasing Subsequence (LIS)
+
+LIS and its variants (number of LIS, Russian Doll envelopes, longest chain) all share the same structure: for each element, look back at previous elements and extend the best sequence you can.
+
+```python
+def length_of_lis(nums):
+    dp = [1] * len(nums)
+    for i in range(len(nums)):
+        for j in range(i):
+            if nums[j] < nums[i]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    return max(dp)
+```
+
+O(n²) is fine for small inputs. For larger ones, there's a patience-sorting variant with binary search that gets you O(n log n). But honestly, the O(n²) version is what you'll reach for first in an interview — it's easier to explain and modify.
+
+---
+
+## Wrapping up
+
+There are more patterns out there (tree DP, digit DP, bitmask DP), but these 7 cover the vast majority of problems you'll run into. My advice? Pick one pattern a week and solve 3–4 problems from that category. Don't jump between patterns — build the recognition muscle one at a time.
+
+The moment DP clicked for me was when I stopped trying to "solve" the problem and started asking: **what's the state, and what are the transitions?** Answer those two questions and the code practically writes itself.

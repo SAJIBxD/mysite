@@ -4,34 +4,104 @@ pubDate: 2023-05-27T19:46:12+06:00
 summary: 'A collection of useful ffmpeg commands for video and audio processing.'
 ---
 
-Convert all mkv to mp4:
+I keep forgetting these, so here's my living collection of ffmpeg one-liners. Every time I figure out a new one, it goes in here.
+
+## Convert all MKV to MP4
+
+Codec copy means no re-encoding — it's basically instant and lossless.
 
 ```shell
 for i in *.mkv; do
     ffmpeg -i "$i" -codec copy "${i%.*}.mp4"
-    done
+done
 ```
 
-Convert webm to mp4:
+## Convert WebM to MP4
+
+WebM containers need the `-fflags +genpts` flag sometimes to regenerate timestamps.
 
 ```shell
 for i in *.webm; do
-    ffmpeg -fflags +genpts -i "$i" - r 24 "${i%.*}.mp4"
-        done
+    ffmpeg -fflags +genpts -i "$i" -r 24 "${i%.*}.mp4"
+done
 
-ffmpeg -fflags +genpts -i 1.webm -r 24 1.mp4
+# Single file version
+ffmpeg -fflags +genpts -i input.webm -r 24 input.mp4
 ```
 
-Convert audio m4a mp3:
+## Convert audio (M4A to MP3)
+
+Need FFmpeg compiled with `--enable-libmp3lame`. The `-q:a 2` flag controls quality (0 = best, 9 = worst).
 
 ```shell
-for f in *.m4a; do ffmpeg -i "$f" -codec:v copy -codec:a libmp3lame -q:a 2 "${f%.m4a}.mp3"; done
+for f in *.m4a; do
+    ffmpeg -i "$f" -codec:v copy -codec:a libmp3lame -q:a 2 "${f%.m4a}.mp3"
+done
 ```
 
-Merge multiple file under a directory into one:
+## Merge multiple video files into one
+
+Create a list file and feed it to the concat demuxer. Works with any files that share the same codec.
 
 ```shell
 for f in *.mp4; do echo "file '$f'" >> videos.txt; done
 
-ffmpeg -f concat -i videos.txt -c copy output.mp4
+ffmpeg -f concat -safe 0 -i videos.txt -c copy output.mp4
+
+# Clean up
+rm videos.txt
 ```
+
+I've used this for stitching together meeting recordings more times than I can count.
+
+## Trim a video without re-encoding
+
+Cut from 30s to 60s — useful for pulling clips out of longer recordings.
+
+```shell
+ffmpeg -i input.mp4 -ss 00:00:30 -to 00:01:00 -c copy output.mp4
+```
+
+## Extract audio from video
+
+```shell
+ffmpeg -i input.mp4 -q:a 0 -map a output.mp3
+```
+
+The `-map a` flag makes sure you only grab audio streams (no video tracks).
+
+## Compress a video for smaller file size
+
+Lower the `-crf` value for higher quality (18 is visually lossless, 28 is decent compression, 51 is a potato).
+
+```shell
+ffmpeg -i input.mp4 -vcodec libx264 -crf 28 -preset fast output.mp4
+```
+
+## Speed up / slow down a video
+
+1.5x speed — adjust the `setpts` multiplier:
+
+```shell
+ffmpeg -i input.mp4 -filter:v "setpts=0.667*PTS" -filter:a "atempo=1.5" output.mp4
+```
+
+For slow motion, invert: `setpts=2.0*PTS` + `atempo=0.5`.
+
+## Take a screenshot at a specific timestamp
+
+```shell
+ffmpeg -i input.mp4 -ss 00:05:23 -vframes 1 thumbnail.png
+```
+
+## Convert image sequence to video
+
+If you have a folder of frames:
+
+```shell
+ffmpeg -framerate 24 -pattern_type glob -i "*.png" -c:v libx264 -pix_fmt yuv420p output.mp4
+```
+
+---
+
+That's the list so far. I add to it whenever I have to Google the same thing twice.

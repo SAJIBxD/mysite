@@ -1,21 +1,49 @@
 ---
-title: "Fix Unable to Mount Some Ntfs Partition"
+title: "Fix Unable to Mount Some NTFS Partition"
 pubDate: 2025-03-02T19:09:35+06:00
-summary: 'Solution for the "Unable to mount some NTFS partition" error when trying to mount NTFS partitions on Linux.'
+summary: 'Solution for the "Unable to mount some NTFS partition" error on Linux.'
 ---
 
-Recently udisks (which is the daemon dolphin uses in the background to mount the disk) has changed it's defaults from the older ntfs-3g implementation to the newer ntfs3 driver in the kernel. Said driver is less lenient when there's a ntfs disk corruption present of some sort. The best way to fix this would be to run a chkdsk from Windows to make sure there aren't any filesystem inconsistencies.
+Ran into this one after a recent kernel update on my Linux machine. An NTFS drive I'd been mounting without issues for months suddenly refused to connect. The error message was about as helpful as you'd expect: "Unable to mount some NTFS partition."
 
-```sh
+## What's going on
+
+Turns out `udisks2` — the daemon that file managers like Dolphin use under the hood — changed its default NTFS driver from the old `ntfs-3g` (userspace) to the newer `ntfs3` kernel driver. The kernel driver is faster, but it's also less forgiving. If there's even minor disk corruption on the NTFS filesystem, `ntfs3` refuses to mount it.
+
+## The real fix: run chkdsk from Windows
+
+If you have access to Windows (dual boot or a friend's machine), this is the cleanest solution:
+
+```shell
 chkdsk /f /r
 ```
 
-If that's not an option, you can ignore the corruption that prevents ntfs3 from mounting the disk by either mounting it with the "force" command or using
+The `/r` flag finds bad sectors and recovers readable data. This fixes whatever corruption is confusing ntfs3.
 
-```sh
-ntfsfix -d /dev/sdXY
+## Linux-only workarounds
+
+If booting into Windows isn't an option, you have two choices:
+
+**Option 1 — Force mount with ntfs3**
+
+```shell
+sudo mount -t ntfs3 -o recover,force /dev/sdXY /mnt/mountpoint
 ```
 
-where /dev/sdXY is the device node of the partition
+The `force` flag tells ntfs3 to mount even with corruption. `recover` replays the journal. This works in most cases.
 
-see: https://bbs.archlinux.org/viewtopic.php?id=291894
+**Option 2 — Run ntfsfix**
+
+```shell
+sudo ntfsfix -d /dev/sdXY
+```
+
+This clears the dirty flag and forces a journal check. Replace `/dev/sdXY` with your actual partition (find it with `lsblk` or `fdisk -l`).
+
+**Option 3 — Force udisks2 to use ntfs-3g instead**
+
+You can override the driver preference by editing the udisks2 config, but honestly, the `ntfsfix` route has been simpler for me. Just run it, reboot, and the drive mounts normally.
+
+## Reference
+
+The Arch Linux forums had the clearest breakdown: https://bbs.archlinux.org/viewtopic.php?id=291894

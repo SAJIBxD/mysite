@@ -1,6 +1,6 @@
 ---
 title: MovieApp
-description: MovieApp
+description: A movie discovery app with search, favorites, and detailed movie pages.
 summary: A movie discovery app with search, favorites, and detailed movie pages.
 stack: React · Vite · TMDB API · React Router · Local Storage
 tags: ["Web App", "Personal"]
@@ -8,9 +8,7 @@ pubDate: 2025-03-04
 order: 3
 ---
 
-MovieApp is a React + Vite project I built for browsing movies quickly without a complicated UI.
-
-You can load popular movies, search by title, save favorites, and open a full details page for each movie.
+I spend way too much time scrolling through streaming catalogs trying to decide what to watch. MovieApp is my attempt at a cleaner browsing experience — fast, minimal, no ads, no autoplay trailers.
 
 ## Tech Stack
 
@@ -32,29 +30,22 @@ _Home view of MovieApp deployed on Render._
 
 ## What It Does
 
-- Shows popular movies on first load.
-- Lets users search by movie title.
-- Supports add/remove favorite with a heart toggle.
-- Saves favorites in browser local storage.
-- Includes a details page with runtime, genres, rating, budget, and revenue.
+- Shows popular movies on first load — no searching needed
+- Search by movie title with live results
+- Save favorites with a heart toggle (stays checked between sessions)
+- Full detail page: runtime, genres, rating, budget, revenue
 
 ## Implementation Notes
 
-- **Routing:** I used React Router for Home, Favorite, and Movie details (`/movie/:id`).
-- **State management:** Favorites are handled through a `MovieContext` so the state stays shared and predictable.
-- **Persistence:** Favorites are synced to `localStorage`, so refresh doesn’t clear everything.
-- **API layer:** Data is fetched from TMDB using env variables (`VITE_API_KEY`, `VITE_BASE_URL`).
-- **Card behavior:** Clicking a card opens details, while the heart button only toggles favorite state.
+I used **React Router** for the pages (Home, Favorites, and `/movie/:id` for details). Favorites live in a **MovieContext** so the state is shared predictably across components, and they're synced to **localStorage** — refresh the page and your saved movies are still there.
 
-## Challenges & Learnings
+The hard part was getting the card interactions right. Clicking a card should navigate to the details page, but clicking the heart should only toggle the favorite — not navigate. Took me a couple tries to get that right without confusing the user.
 
-- Getting card interactions right took care (favorite toggle vs navigation click).
-- Reusing one card component in both Home and Favorites kept the UI more consistent.
-- Context + local storage is enough for this scope and keeps the app lightweight.
+Reusing the same card component for both Home and Favorites turned out to be a good call. Kept the UI consistent and saved me from maintaining two variants.
 
-## Next Improvements
+## What I'd Add Next
 
-- Add pagination or infinite scroll.
-- Add filters for genre, year, and rating.
-- Improve empty/error states with better loading feedback.
-- Add user auth so favorites can sync across devices.
+- Pagination or infinite scroll (the API has more results than I'm showing)
+- Genre/year/rating filters
+- Better empty and error states — nothing worse than a broken image placeholder
+- User auth so favorites sync across devices instead of living in localStorage

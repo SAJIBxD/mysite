@@ -1,6 +1,6 @@
 ---
 title: CSS Image Track
-description: CSS Image Track
+description: Smooth image sliding component using pure CSS.
 summary: Smooth image sliding component using pure CSS.
 stack: HTML · CSS
 tags: ["UI", "Personal"]
@@ -8,9 +8,7 @@ pubDate: 2025-03-21
 order: 4
 ---
 
-CSS Image Track is a smooth image slider built using only HTML and CSS.
-
-I made this as a small challenge for myself: build a clean sliding image track without touching JavaScript.
+I set myself a small challenge: build a clean sliding image gallery without touching JavaScript. No libraries, no frameworks, no JS at all — just HTML and CSS.
 
 ## Tech Stack
 
@@ -22,18 +20,20 @@ HTML · CSS
 
 ## Overview
 
-The idea was to practice layout and motion fundamentals using only CSS. No libraries, no frameworks, just structure + styling.
+The idea was simple — a horizontal image track that scrolls smoothly. But the constraint (no JS) forced me to think differently about layout, animation, and interaction.
 
-I focused on keeping the animation smooth, the spacing balanced, and the component easy to drop into any static page.
+CSS animations and transitions did all the heavy lifting. The trick was getting the timing and easing curves right so it feels natural rather than robotic. A little `cubic-bezier()` tweaking goes a long way.
+
+I also made sure the component is responsive — it shrinks down gracefully without breaking layout — and easy to drop into any static page with minimal markup.
 
 ## What I Learned
 
-- Small CSS decisions (timing, easing, spacing) make a big difference in perceived quality.
-- Building without JavaScript forces cleaner thinking about structure.
-- Responsive behavior is easier to manage when the base layout is simple.
+- **Small CSS decisions matter more than you'd think.** The difference between `ease-in-out` and a custom bezier curve is the difference between "okay" and "feels right."
+- **No-JS constraints force cleaner structure.** When you can't hide behind JavaScript, your HTML has to carry its weight. The markup ends up simpler and more semantic.
+- **Responsive behavior is easier** when the base layout isn't fighting a bunch of JS calculations.
 
-## Next Steps
+## What I'd Add Next
 
-- Add keyboard-friendly controls.
-- Add optional captions and image metadata.
-- Create a second version with touch drag support.
+- Keyboard-friendly controls (left/right arrows to navigate)
+- Optional captions and image metadata
+- A second version with touch drag support (would need a little JS, but worth it)

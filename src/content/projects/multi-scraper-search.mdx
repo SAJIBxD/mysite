@@ -1,6 +1,6 @@
 ---
 title: MultiScraperSearch
-description: MultiScraperSearch
+description: A FastAPI app that aggregates movie/series search results from multiple scraper sources.
 summary: A FastAPI app that aggregates movie/series search results from multiple scraper sources.
 stack: Python · Web Scraping · FastAPI · JSON
 tags: ["API", "Personal"]
@@ -8,9 +8,9 @@ pubDate: 2025-12-22
 order: 1
 ---
 
-MultiScraperSearch is a FastAPI project I built to search multiple movie/series sources from one place.
+I got tired of searching the same movie title across half a dozen sites to find where I could watch it. So I built a thing that does it for me.
 
-Instead of visiting each site separately, I can query once and get grouped results back from all connected scrapers.
+MultiScraperSearch is a FastAPI project that takes a search query, fires it at multiple scraper sources in parallel, and returns everything grouped by source. One query, one response, no tab-hopping.
 
 ## Tech Stack
 
@@ -30,66 +30,44 @@ Python · Web Scraping · FastAPI · JSON
 
 _Search UI for querying multiple scraper sources from one place._
 
-## Core Features
-
-- Single search endpoint: `/search/{query}`.
-- Aggregates results from more than one scraper implementation.
-- Returns structured JSON grouped by source name.
-- Includes a minimal frontend (`/`) to run searches and render result cards.
-- Opens result links in new tabs directly from each card.
-
 ## How It Works
 
-1. User enters a keyword in the frontend.
-2. Frontend calls `/search/{query}`.
-3. Backend loops through registered scraper classes.
-4. Each scraper fetches and parses its target site.
-5. API returns source-wise grouped results, then the UI renders each section.
+1. Type a keyword in the frontend.
+2. It calls `/search/{query}` on the backend.
+3. Backend loops through all registered scraper classes — each one fetches and parses its target site.
+4. Results come back as JSON, grouped by source.
+5. The UI renders each source as its own section with clickable result cards.
+
+The whole flow takes a couple seconds. Way faster than checking five tabs manually.
 
 ## API Response Shape
 
-The search response is a list of source objects, for example:
+The search endpoint returns a list of source objects:
 
 ```json
 [
-	{
-		"mlwbd": [
-			{
-				"title": "...",
-				"url": "...",
-				"thumbnail": "..."
-			}
-		]
-	},
-	{
-		"MoviesMod": [
-			{
-				"title": "...",
-				"url": "...",
-				"thumbnail": "..."
-			}
-		]
-	}
+  {
+    "mlwbd": [
+      { "title": "...", "url": "...", "thumbnail": "..." }
+    ]
+  },
+  {
+    "MoviesMod": [
+      { "title": "...", "url": "...", "thumbnail": "..." }
+    ]
+  }
 ]
 ```
 
-## Implementation Notes
+## What I Learned Building This
 
-- Built with FastAPI and deployed on Render.
-- Uses `requests` + `BeautifulSoup` (`lxml`) for scraping.
-- Scraper logic is split into separate classes (`Mlwbd`, `MoviesMod`).
-- Uses permissive CORS so the API is easier to consume from different clients.
-- Serves a simple built-in frontend with `FileResponse("index.html")`.
+- **Every source has different HTML.** You can't reuse selectors blindly — each site structures things differently. Scrapers break when markup changes, so maintenance is part of the gig.
+- **Grouping results by source** made debugging way easier. If one scraper returns nothing, you can see exactly which one failed.
+- **A minimal frontend goes a long way.** I kept it simple — `FileResponse("index.html")` — and it does everything I need.
 
-## Challenges & Learnings
+## What I'd Add Next
 
-- Every source has different HTML structure, so selectors cannot be reused blindly.
-- Source markup changes over time, so scraper maintenance is part of the job.
-- Returning results grouped by source made debugging much easier.
-
-## Next Improvements
-
-- Add timeout/retry handling per source.
-- Run source requests concurrently for better speed.
-- Add caching for repeated queries.
-- Add pagination/limits and cleaner normalization across sources.
+- Timeout/retry handling per source (some sites are slow)
+- Run requests concurrently for better speed
+- Caching for repeated queries
+- Better normalization so results from different sources are easier to compare

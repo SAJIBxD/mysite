@@ -1,6 +1,6 @@
 ---
 title: FileSync
-description: FileSync
+description: Multi-user file upload service with JWT sessions, API tokens, and per-user storage quotas.
 summary: Multi-user file upload service with JWT sessions, API tokens, and per-user storage quotas.
 stack: FastAPI · Python · JWT · Bcrypt · JSON Storage
 tags: ["API", "Backend", "Personal"]
@@ -8,9 +8,7 @@ pubDate: 2026-04-26
 order: 3
 ---
 
-FileSync is a lightweight multi-user file service where each user gets a private upload space and can manage files through both a browser dashboard and API endpoints.
-
-I built it to keep the workflow practical: create user, log in, upload files, open/download/delete them, and also support script-friendly uploads with a long-lived API token.
+FileSync is a lightweight multi-user file service. Each user gets a private upload space with a dashboard and API access. I built it because I wanted a simple file locker that didn't require signing up for a cloud service or configuring S3 buckets.
 
 ## Tech Stack
 
@@ -26,45 +24,33 @@ FastAPI · Python · JWT · Bcrypt · JSON Storage
 
 ## Core Functionality
 
-At its core, FileSync is a file locker per username.
+Create a user, log in, upload files, open/download/delete them. That's the core loop.
 
-When a user signs up, the app hashes the password with bcrypt (after SHA-256 pre-hashing) and stores a generated API token. After login, the user gets a short-lived JWT for normal dashboard/API actions.
+The auth is two-pronged:
 
-From there, each user can:
+1. **JWT sessions** — short-lived tokens for the browser dashboard. Login, get a token, do your thing.
+2. **API tokens** — long-lived tokens for scripts and automation. Rotate them when needed.
 
-- See only their own file list.
-- Upload files to their own directory.
-- Open files inline in browser or download them.
-- Delete files.
-- Rotate API token when needed.
+Passwords are hashed with bcrypt (after a SHA-256 pre-hash). User data lives in a JSON file — not production-grade, but fine for personal use.
 
-There are two upload modes:
+Each user gets a 100 MB quota. The upload service sanitizes filenames, blocks path traversal tricks, and auto-renames collisions (`file_1`, `file_2`, etc.) so nothing gets silently overwritten.
 
-- Session/JWT upload (`/{username}/upload`) for normal signed-in usage.
-- API token upload (`/api/upload`) for automation and scripts.
+## Two Upload Modes
 
-The frontend pages are intentionally simple and server-rendered templates, but they still provide practical quality-of-life behavior like login persistence (localStorage), one-click open/delete, pasted-text upload as a file, and API token display/rotation.
+- **Session/JWT upload** (`/{username}/upload`) — for normal signed-in usage via the browser
+- **API token upload** (`/api/upload`) — for scripts and automation. Great for piping output from a cron job or a local backup script
 
-## How It Works Internally
+The frontend is intentionally simple — server-rendered templates with just enough behavior to feel smooth (login persistence via localStorage, one-click open/delete, paste-text-as-file, API token display and rotation).
 
-1. `POST /create-user` validates username + password rules and stores user data in `db.json`.
-2. `POST /{username}/login` verifies password and returns JWT + API token.
-3. Authenticated requests are guarded by dependencies:
-   - JWT guard ensures users can only access their own routes.
-   - API-token guard verifies bearer token matches provided username.
-4. Upload service sanitizes filenames, blocks traversal patterns, auto-renames collisions (`file_1`, `file_2`, ...), and enforces a 100 MB total quota per user.
-5. Files live under `uploads/{username}` and are served inline or as attachments.
+## What I Focused On
 
-## Things I Focused On
+- Auth that's straightforward but not stupid. No over-engineered OAuth flows for a personal file server.
+- File-system safety — unsafe names, path traversal, overwrite collisions. All the things that go wrong when you let people upload arbitrary files.
+- Dual access model: browser users get a dashboard, script users get a token. No extra complexity for either path.
 
-- Keeping auth straightforward but safe for a compact project.
-- Preventing common file-system issues (unsafe names, path traversal, overwrite collisions).
-- Supporting both browser usage and script/CLI usage without extra complexity.
-- Making the API easy to understand from the homepage docs and curl examples.
+## What I'd Add Next
 
-## Next Improvements
-
-- Replace JSON file storage with a real database for better durability and scaling.
-- Add per-file size limits and MIME-type validation.
-- Add token revocation/expiry policies for API tokens.
-- Add tests for auth and file edge cases.
+- Replace the JSON file storage with SQLite or a real database (JSON is fragile at scale)
+- Per-file size limits and MIME-type validation
+- Token revocation or expiry policies
+- Tests for auth and file edge cases (this is the kind of project where bugs are silent until they bite you)

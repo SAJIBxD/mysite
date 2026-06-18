@@ -1,31 +1,37 @@
 ---
 title: Why I prefer simple tools
-description: Why I prefer simple tools
+description: On choosing boring, understandable tools over clever ones.
 summary: On choosing boring, understandable tools over clever ones.
 pubDate: 2026-01-14
 ---
 
-Over time, I’ve noticed that tools which promise to do everything often end up doing nothing particularly well.
+I've spent enough time fighting with tools that were supposed to make my life easier. Somewhere along the way I realized: if a tool takes more time to configure than to actually use, it's not a tool — it's a hobby.
 
-Simple tools are easier to understand, easier to debug, and easier to leave when they stop serving you.
+Don't get me wrong, I love a good hack. But when it comes to production code, collaborative projects, or even just my own workflow — I reach for the boring option every time.
 
-This isn’t an argument against complexity — it’s an argument for clarity.
+## Why boring wins
 
-> “If a tool is hard to explain, it’s usually hard to maintain.”
+Simple tools have a few properties that make them hard to beat:
 
-## Quick takeaways
+**You can understand them.** Open up a small tool's source or config and you can trace through it in one sitting. No magic. No "it works but I don't know why."
 
-- Prefer small tools with clear boundaries.
-- Optimize for readability and debuggability.
-- Document decisions while they’re fresh.
+**You can debug them.** When something breaks (and it will), the surface area is small. There aren't fifteen layers of abstraction between you and the problem.
 
-## Checklist
+**You can replace them.** If a simple tool stops serving you, you swap it out without rewriting everything around it. Try that with your all-in-one platform.
 
-1. Can I explain it in one paragraph?
-2. Can a teammate debug it in one sitting?
+## The test I use
+
+Before I adopt any tool (or write my own), I ask three questions:
+
+1. Can I explain what it does in one paragraph?
+2. Can someone else debug it in one sitting?
 3. Can I replace it without rewriting everything?
 
-## Demo code
+If the answer to any of those is "no," I'm skeptical. Sometimes the complexity is justified. But more often than not, it's accidental — accumulated through feature creep and "what if" thinking.
+
+## A concrete example
+
+I wrote this tiny function recently for estimating insurance costs:
 
 ```python
 # simple, boring, and clear
@@ -39,9 +45,19 @@ def estimate_cost(age, bmi, smoker):
 print(estimate_cost(28, 23.4, False))
 ```
 
-## Comparison table
+Is it the most elegant solution in the world? No. Could it be refactored into a class hierarchy with strategy patterns and dependency injection? Sure. Would that make it better? Absolutely not. It's readable, testable, and does exactly what it says. That's worth more than cleverness.
 
-| Approach | Clarity | Maintenance |
-| --- | --- | --- |
-| Small tools | High | Low effort |
-| All-in-one suite | Medium | High effort |
+## What about when you actually need complexity?
+
+This isn't an argument against complexity — it's an argument for clarity. Some problems genuinely demand complex solutions. The trick is not adding complexity before you've confirmed you need it.
+
+I've found that most "complex" requirements turn out to be simpler than they first appear. Start boring. Add complexity only when you can point to a specific gap the simple solution can't fill.
+
+## The comparison
+
+| Approach | Clarity | Maintenance | Replacability |
+| --- | --- | --- | --- |
+| Small tools | High | Low effort | Easy |
+| All-in-one suite | Medium | High effort | Painful |
+
+I know which side I'd rather be on.

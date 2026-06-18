@@ -4,31 +4,32 @@ pubDate: 2025-03-10T00:18:31+06:00
 summary: 'A step-by-step guide to obtaining your Spotify saved albums using the Spotify API.'
 ---
 
-To get a Spotify access token, follow these steps:
+I wanted to export my saved Spotify albums for a personal project recently, and the official Spotify API doesn't exactly hand them to you on a silver platter. You have to go through the OAuth dance first. Here's how I did it.
 
 ## Step 1: Create a Spotify Developer App
 
 1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 2. Log in and click "Create an App"
-3. Note your Client ID and Client Secret
+3. Give it a name — doesn't matter what
+4. Note your **Client ID** and **Client Secret** from the app settings
 
 ## Step 2: Get an Access Token
 
-Since saved albums require user authentication, you need to use OAuth 2.0 Authorization Code Flow.
+Saved albums require user-level authentication (OAuth 2.0 Authorization Code Flow), not just the client credentials flow. Here's the flow:
 
-**Get Authorization Code**  
-Open this URL in your browser (replace `YOUR_CLIENT_ID` with your actual Client ID):
+**Get an Authorization Code**
+
+Open this URL in your browser (replace `YOUR_CLIENT_ID` with the one from step 1):
 
 ```
-https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=http://localhost:8080/callback&scope=user-library-read
+https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=http://localhost:8888/callback&scope=user-library-read
 ```
 
-1. Log in and authorize the app
-2. Spotify redirects you to `http://localhost:8888/callback?code=YOUR_AUTH_CODE`
-3. Copy the `AUTH_CODE` from the URL
+1. Log in with your Spotify account and authorize the app
+2. Spotify redirects you to something like `http://localhost:8888/callback?code=THE_AUTH_CODE`
+3. Your browser will probably show an error (there's nothing listening on that port) — that's fine. **Copy the `code` parameter from the URL**
 
-**Exchange AUTH_CODE for Access Token**  
-Run this cURL command (replace `YOUR_CLIENT_ID`, `YOUR_CLIENT_SECRET`, and `YOUR_AUTH_CODE`):
+**Exchange the Code for an Access Token**
 
 ```shell
 curl -X POST "https://accounts.spotify.com/api/token" \
@@ -40,23 +41,61 @@ curl -X POST "https://accounts.spotify.com/api/token" \
      -d "client_secret=YOUR_CLIENT_SECRET"
 ```
 
-You'll get a JSON response like this:
+You'll get back something like:
 
 ```json
 {
-  "access_token": "YOUR_ACCESS_TOKEN",
+  "access_token": "BQD...xyz",
   "token_type": "Bearer",
   "expires_in": 3600,
-  "refresh_token": "YOUR_REFRESH_TOKEN",
+  "refresh_token": "AQD...abc",
   "scope": "user-library-read"
 }
 ```
 
+Save the `access_token` and `refresh_token`. The access token is good for one hour.
+
 ## Step 3: Get Your Saved Albums
 
-Use the access token to make a request to the Spotify API to get your saved albums. You can use the following cURL command.
+Now the fun part. Use the access token to hit the API:
 
 ```shell
 curl -X GET "https://api.spotify.com/v1/me/albums?limit=50" \
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+     -H "Authorization: Bearer BQD...xyz"
 ```
+
+The API returns paginated results — `limit=50` gives you the maximum per page. Check the `next` field in the response to paginate through.
+
+## Bonus: A Python script to do it all
+
+Since I got tired of copy-pasting curl commands, I wrote this small Python script:
+
+```python
+import requests
+
+def get_saved_albums(access_token):
+    albums = []
+    url = "https://api.spotify.com/v1/me/albums?limit=50"
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    while url:
+        resp = requests.get(url, headers=headers).json()
+        for item in resp["items"]:
+            album = item["album"]
+            albums.append({
+                "name": album["name"],
+                "artist": album["artists"][0]["name"],
+                "release_date": album["release_date"],
+                "url": album["external_urls"]["spotify"]
+            })
+        url = resp.get("next")  # next page, or None
+
+    return albums
+
+# Usage — paste your token here or load from env
+# albums = get_saved_albums("BQD...xyz")
+# for a in albums:
+#     print(f"{a['artist']} — {a['name']}")
+```
+
+Toss your token in an environment variable and you're good. The script handles pagination automatically and returns a clean list you can dump to JSON, CSV, or whatever format your project needs.

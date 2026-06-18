@@ -1,6 +1,6 @@
 ---
 title: ChatApp
-description: ChatApp
+description: Simple messaging app with React, Express, and MongoDB.
 summary: Simple messaging app with React, Express, and MongoDB.
 stack: React · Express · MongoDB · Socket.io
 tags: ["Web App", "Personal"]
@@ -8,9 +8,7 @@ pubDate: 2025-03-26
 order: 2
 ---
 
-ChatApp is a real-time messaging app with a lightweight UI and a simple backend for persistence.
-
-I built it to feel fast and straightforward: send messages instantly, keep the interface clean, and avoid unnecessary complexity.
+ChatApp is a real-time messaging app I built to properly understand WebSockets. I'd read about them plenty of times, but reading and building are two very different things.
 
 ## Tech Stack
 
@@ -20,20 +18,22 @@ React · Express · MongoDB · Socket.io
 
 [https://chat-client-33n1.onrender.com/](https://chat-client-33n1.onrender.com/)
 
-## Overview
+## How It Works
 
-This project started as a hands-on way for me to learn realtime communication properly instead of just reading about WebSockets.
+Users connect, messages fly through Socket.io in real time, and chat history is persisted in MongoDB so conversations survive a page refresh. The UI is intentionally minimal — a clean message list, an input bar, and nothing else.
 
-The core flow is simple: users connect, messages are broadcast through Socket.io, and chat history is stored in MongoDB so conversations are not lost after refresh.
+The backend is Express with two concerns: REST routes for fetching message history, and the Socket.io server for live messaging. Keeping them separate made the code easier to reason about.
+
+On the frontend, React handles the reactive state — new messages from the socket update the UI instantly without polling or manual refresh.
 
 ## What I Focused On
 
-- Real-time message delivery with stable socket connections.
-- A minimal UI that stays readable during longer chats.
-- Clean separation between frontend, API routes, and socket logic.
+- **Stable socket connections** — the last thing you want in a chat app is messages that don't arrive. Socket.io handles reconnection, but I spent time making sure the UX doesn't break when someone's wifi dips.
+- **A clean UI** that stays readable even during long conversations. No busy backgrounds, no animated avatars, no distractions.
+- **Clean separation** between the frontend components, the API routes, and the socket event handlers. Made debugging a lot easier.
 
-## Next Steps
+## What I'd Add Next
 
-- Add authentication and private rooms.
-- Add message timestamps and read indicators.
-- Improve mobile layout and keyboard UX.
+- Authentication and private rooms (right now anyone can join and see all messages)
+- Message timestamps and read indicators
+- Better mobile layout — the keyboard UX on phones is rough and needs work
