@@ -507,11 +507,12 @@ footer {
 }
 .now-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   background: var(--rule);
   border: 1px solid var(--rule);
 }
+.link-grid > :last-child:nth-child(odd), .now-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 .now-cell { background: var(--paper); padding: 1.5rem 1.75rem; }
 .now-cell-label {
   font-family: var(--mono);
