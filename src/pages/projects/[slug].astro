@@ -28,7 +28,7 @@ const tagLine = entry.data.tags?.length ? ` - ${entry.data.tags.join(' - ')}` : 
 >
 	<header class="page-header">
 		<p class="page-eyebrow">Project</p>
-		<h1 class="page-title">{entry.data.title}</h1>
+		<h1 class="page-title" set:html={entry.data.title} />
 		<p class="page-subtitle">{entry.data.description ?? 'A project write-up from my archive.'}</p>
 		<p class="page-subtitle page-subtitle--mono">{formattedDate}{tagLine}</p>
 	</header>

@@ -57,7 +57,7 @@ const tagsFor = (project: ProjectEntry): string[] => {
 				<a href={`/projects/${project.slug}/`} class="project-card">
 					<span class="project-num">{String(index + 1).padStart(2, '0')}</span>
 					<div class="project-body">
-						<h2 class="project-title">{project.data.title}</h2>
+						<h2 class="project-title" set:html={project.data.title} />
 						<p class="project-desc">{project.data.summary ?? project.data.description ?? 'No description provided yet.'}</p>
 						{tagsFor(project).length ? (
 							<div class="project-tags">

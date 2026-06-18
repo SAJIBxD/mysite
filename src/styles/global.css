@@ -439,6 +439,10 @@ footer {
   line-height: 1.25;
   margin-bottom: 0.35rem;
 }
+
+.project-title em,.note-title em {
+  font-style: normal;
+}
 .note-snippet {
   font-size: 0.83rem;
   color: var(--muted);

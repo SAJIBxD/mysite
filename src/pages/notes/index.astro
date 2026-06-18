@@ -39,7 +39,7 @@ const notes = (await getCollection('notes'))
 							{displayDate.month}<br />{displayDate.year}
 						</span>
 						<div class="note-body">
-							<h2 class="note-title">{note.data.title}</h2>
+							<h2 class="note-title" set:html={note.data.title} />
 							<p class="note-snippet">{note.data.summary ?? note.data.description ?? 'No summary provided yet.'}</p>
 						</div>
 						<span class="note-arrow">→</span>

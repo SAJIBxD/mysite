@@ -26,7 +26,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 >
 	<header class="page-header">
 		<p class="page-eyebrow">Note</p>
-		<h1 class="page-title">{entry.data.title}</h1>
+		<h1 class="page-title" set:html={entry.data.title} />
 		<p class="page-subtitle">{entry.data.description ?? 'A note from my personal archive.'}</p>
 		<p class="page-subtitle page-subtitle--mono">{formattedDate}</p>
 	</header>
