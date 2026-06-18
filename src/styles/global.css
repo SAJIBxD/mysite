@@ -228,7 +228,7 @@ footer {
 }
 .hero-name em { font-style: normal; color: var(--accent); }
 .hero-tagline {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 300;
   color: var(--muted);
   max-width: 38ch;
@@ -316,7 +316,7 @@ footer {
   transition: transform 0.2s;
 }
 .link-card:hover .arrow { transform: translateX(4px); }
-.link-card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+.link-card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
 
 .projects-section { padding: 3rem 0; animation: fadeUp 0.5s 0.15s ease both; }
 .project-list { border: 1px solid var(--rule); }
