@@ -9,6 +9,11 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://iamsajib.me',
   integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      theme: 'min-light'
+    }
+  },
 
   vite: {
     plugins: [tailwindcss()]
