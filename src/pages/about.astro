@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 			</h1>
 		</div>
 		<div class="about-mascot">
-			<img src="/cat_with_glasses.png" alt="Cat with glasses - Sajib's mascot" />
+			<img src="/cat_with_glasses.webp" alt="Cat with glasses - Sajib's mascot" width="705" height="661" fetchpriority="high" />
 		</div>
 	</header>
 
@@ -65,24 +65,38 @@ import Layout from '../layouts/Layout.astro';
 					</li>
 				</ul>
 			</div>
-			<div class="now-cell">
+			<div class="now-cell now-cell--wide">
 				<span class="now-cell-label">Learning</span>
 				<ul class="learning-list">
 					<li>
-						<span class="learning-label">AI / ML</span>
+						<div class="learning-main">
+							<span class="learning-label">AI / ML</span>
+							<span class="learning-desc">Models, LLMs, and experimentation</span>
+						</div>
 						<div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
-						<span class="learning-pct">70%</span>
+						<span class="learning-status"><span class="learning-pct">70%</span></span>
+					</li>
+					<li class="is-done">
+						<div class="learning-main">
+							<span class="learning-label">Web designing</span>
+							<span class="learning-desc">HTML, CSS, JavaScript, performance</span>
+						</div>
+						<div class="progress-bar"><div class="progress-fill is-complete" style="width:100%"></div></div>
+						<span class="learning-status">
+							<span class="learning-pct">100%</span>
+							<span class="learning-pct is-complete">Completed</span>
+							<a class="learning-cert" href="/Certificate_WD.pdf" target="_blank" rel="noopener">View certificate ↗</a>
+						</span>
 					</li>
 					<li>
-						<span class="learning-label">Web designing</span>
-						<div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
-						<span class="learning-pct">90%</span>
+						<div class="learning-main">
+							<span class="learning-label">Android development</span>
+							<span class="learning-desc">Kotlin, Android SDK, mobile apps</span>
+						</div>
+						<div class="progress-bar"><div class="progress-fill" style="width:32%"></div></div>
+						<span class="learning-status"><span class="learning-pct">32%</span></span>
 					</li>
-					<li>
-						<span class="learning-label">Android development</span>
-						<div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
-						<span class="learning-pct">12%</span>
-					</li>
+					
 				</ul>
 			</div>
 		</div>
