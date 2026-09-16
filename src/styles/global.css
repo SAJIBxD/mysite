@@ -1,9 +1,42 @@
-/* Keep Tailwind utilities available for pages that still use utility classes. */
-@import "tailwindcss";
-
 /* =============================================================
    iamsajib.me — Shared Stylesheet
    ============================================================= */
+
+/* Minimal base styles (replaces Tailwind's preflight — Tailwind was
+   unused on this site, so we only keep the few resets we rely on). */
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
 
 :root {
   --ink: #1a1612;
@@ -564,6 +597,10 @@ footer {
   font-family: var(--sans);
   font-size: inherit;
   font-weight: inherit;
+}
+.now-cell .learning-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 .now-cell .learning-list li:first-child {
   padding-top: 0.25rem;
