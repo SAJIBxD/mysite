@@ -54,7 +54,7 @@ const tagsFor = (project: ProjectEntry): string[] => {
 		<p class="section-label">Projects</p>
 		<div class="project-list">
 			{projects.map((project, index) => (
-				<a href={`/projects/${project.slug}/`} class="project-card">
+				<a href={`/projects/${project.id}/`} class="project-card">
 					<span class="project-num">{String(index + 1).padStart(2, '0')}</span>
 					<div class="project-body">
 						<h2 class="project-title" set:html={project.data.title} />

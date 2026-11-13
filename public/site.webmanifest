@@ -1,0 +1,11 @@
+{
+  "name": "iamsajib.me",
+  "short_name": "Sajib",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#f5f0e8",
+  "background_color": "#f5f0e8",
+  "display": "browser"
+}

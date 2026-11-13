@@ -2,26 +2,117 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Lost cat" description="Page not found" mainClass="not-found-page">
+<Layout title="404 — Page not found · Sajib" description="Page not found" mainClass="not-found-page">
 	<header class="page-header">
-		<p class="page-eyebrow">404</p>
+		<p class="page-eyebrow">Error 404</p>
 		<h1 class="page-title">
 			This cat ate<br /><em>your page.</em>
 		</h1>
 		<p class="page-subtitle">
-			We checked under the couch, behind the curtains, and inside a cardboard box. Still nothing.
+			We checked under the couch, behind the curtains, and inside a cardboard box. Found the cat. Not the page.
 		</p>
 	</header>
 
-	<section class="bio">
-		<div class="mascot-wrap">
-			<img src="/cat_lost.png" alt="Lost cat illustration" />
-		</div>
-		<div class="bio-text">
-			<p>The page you are looking for is gone, renamed, or never existed.</p>
-			<p>
-				<a href="/">Return home</a> or browse <a href="/notes/">notes</a> and <a href="/projects/">projects</a>.
-			</p>
-		</div>
+	<figure class="nf-figure">
+		<svg class="nf-art" viewBox="0 0 480 360" role="img" aria-labelledby="nf-art-title">
+			<title id="nf-art-title">A cat wearing round glasses peeks out of a cardboard box marked 404, surrounded by torn scraps of paper.</title>
+
+			<!-- floor + shadow -->
+			<ellipse cx="240" cy="324" rx="150" ry="9" class="nf-shadow" />
+			<path d="M58 323 Q150 320 240 323 T422 322" class="nf-line nf-thin" />
+
+			<!-- back flap (behind the cat) -->
+			<path d="M166 202 L172 146 L308 146 L314 202 Z" class="nf-box-back" />
+			<path d="M178 158 L302 158" class="nf-line nf-hair" />
+
+			<!-- tail swishing out of the box -->
+			<g class="nf-tail">
+				<path d="M322 270 C362 272 384 246 378 214 C374 196 356 192 352 206" class="nf-tail-out" />
+				<path d="M322 270 C362 272 384 246 378 214 C374 196 356 192 352 206" class="nf-tail-in" />
+			</g>
+
+			<!-- cat head -->
+			<g class="nf-cat">
+				<path
+					d="M186 206 C178 170 182 138 196 122 L194 80 Q195 75 200 79 L225 108 C235 105 245 105 255 108 L280 79 Q285 75 286 80 L284 122 C298 138 302 170 294 206 Z"
+					class="nf-fill-paper nf-line"
+				/>
+				<path d="M201 92 L203 113 M279 92 L277 113" class="nf-line nf-thin" />
+				<path d="M214 118 l4 -7 M240 112 l0 -8 M266 118 l-4 -7" class="nf-line nf-hair" />
+
+				<!-- glasses -->
+				<path d="M201 146 L186 139 M279 146 L294 139" class="nf-line" />
+				<circle cx="218" cy="150" r="18" class="nf-lens" />
+				<circle cx="262" cy="150" r="18" class="nf-lens" />
+				<path d="M236 148 Q240 142 244 148" class="nf-line" />
+
+				<!-- eyes, glancing at the flying scrap -->
+				<g class="nf-eyes">
+					<ellipse cx="222" cy="146" rx="4.5" ry="6" class="nf-fill-ink" />
+					<ellipse cx="266" cy="146" rx="4.5" ry="6" class="nf-fill-ink" />
+					<circle cx="223.5" cy="143.5" r="1.4" class="nf-fill-paper" />
+					<circle cx="267.5" cy="143.5" r="1.4" class="nf-fill-paper" />
+				</g>
+
+				<!-- nose, mouth, whiskers -->
+				<path d="M234 170 L246 170 L240 177 Z" class="nf-fill-accent" />
+				<path d="M240 177 Q237 184 231 182 M240 177 Q243 184 249 182" class="nf-line nf-thin" />
+				<path d="M206 174 L166 168 M206 180 L164 182 M274 174 L314 168 M274 180 L316 182" class="nf-line nf-hair" />
+
+				<!-- a scrap still in its mouth -->
+				<path d="M249 181 L268 184 L265 190 L271 195 L252 193 Z" class="nf-fill-paper nf-line nf-thin" />
+			</g>
+
+			<!-- box front -->
+			<rect x="150" y="200" width="180" height="122" class="nf-box" />
+			<rect x="226" y="200" width="28" height="34" class="nf-tape" />
+			<text x="240" y="290" class="nf-404" transform="rotate(-4 240 278)">404</text>
+			<text x="240" y="310" class="nf-label">contents: one cat</text>
+
+			<!-- side flaps -->
+			<path d="M152 201 L106 176 L116 158 L168 188 Z" class="nf-box" />
+			<path d="M328 201 L374 176 L364 158 L312 188 Z" class="nf-box" />
+
+			<!-- paws on the rim -->
+			<g class="nf-fill-paper nf-line">
+				<path d="M190 206 C190 192 220 192 220 206 Z" />
+				<path d="M260 206 C260 192 290 192 290 206 Z" />
+			</g>
+			<path d="M200 199 L200 205 M210 199 L210 205 M270 199 L270 205 M280 199 L280 205" class="nf-line nf-hair" />
+
+			<!-- shredded page bits on the floor -->
+			<g transform="rotate(-12 96 302)">
+				<path d="M70 290 L118 288 L114 296 L121 303 L116 312 L72 314 L76 305 L68 298 Z" class="nf-fill-paper nf-line nf-thin" />
+				<path d="M80 297 L106 296 M80 303 L110 302 M80 309 L98 308" class="nf-rule" />
+			</g>
+			<g transform="rotate(9 388 306)">
+				<path d="M370 296 L404 295 L400 302 L406 310 L372 316 Z" class="nf-fill-paper nf-line nf-thin" />
+				<path d="M378 303 L396 302 M378 309 L392 308" class="nf-rule" />
+			</g>
+			<path d="M128 318 l8 -5 l4 6 z M344 318 l6 -6 l5 5 z" class="nf-fill-paper nf-line nf-hair" />
+
+			<!-- a scrap drifting away -->
+			<g class="nf-float">
+				<g transform="rotate(14 372 92)">
+					<path d="M346 72 L398 70 L394 80 L401 88 L396 100 L398 112 L348 114 L352 102 L345 92 L351 82 Z" class="nf-fill-paper nf-line nf-thin" />
+					<path d="M356 82 L388 81 M356 90 L384 90 M356 98 L390 98 M356 106 L374 106" class="nf-rule" />
+					<path d="M356 82 L372 82" class="nf-rule nf-rule-accent" />
+				</g>
+				<path d="M322 116 q8 -4 14 -2 M316 128 q10 -4 18 -3" class="nf-line nf-hair nf-motion" />
+			</g>
+
+			<!-- puzzled -->
+			<text x="138" y="112" class="nf-q nf-q-1">?</text>
+			<text x="114" y="80" class="nf-q nf-q-2">?</text>
+		</svg>
+	</figure>
+
+	<section class="nf-help">
+		<p>The page you're looking for is gone, renamed, or never existed. Maybe one of these will do instead:</p>
+		<nav class="nf-links" aria-label="Suggested pages">
+			<a href="/" class="nf-link"><span class="nf-link-num">01</span>Home <span class="arrow">→</span></a>
+			<a href="/notes/" class="nf-link"><span class="nf-link-num">02</span>Notes <span class="arrow">→</span></a>
+			<a href="/projects/" class="nf-link"><span class="nf-link-num">03</span>Projects <span class="arrow">→</span></a>
+		</nav>
 	</section>
 </Layout>

@@ -34,7 +34,7 @@ const notes = (await getCollection('notes'))
 			{notes.map((note) => {
 				const displayDate = formatDate(note.date);
 				return (
-					<a href={`/notes/${note.slug}/`} class="note-card">
+					<a href={`/notes/${note.id}/`} class="note-card">
 						<span class="note-date">
 							{displayDate.month}<br />{displayDate.year}
 						</span>

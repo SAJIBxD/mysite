@@ -66,6 +66,6 @@ const badgeText = item.episodes
 				{item.type} · {formatDate(item.watchedDate)}
 			</span>
 		</div>
-		{item.audio ? <audio class="js-watchlist-audio" src={`/bgm/${item.audio}`}></audio> : null}
+		{item.audio ? <audio class="js-watchlist-audio" preload="none" src={`/bgm/${item.audio}`}></audio> : null}
 	</div>
 </article>
